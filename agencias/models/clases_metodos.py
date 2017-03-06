@@ -11,7 +11,7 @@ class versiones_autos(models.Model):
     def _get_brand_default(self):
         print "######## EJECUTANDO _get_brand_default"
         conf_obj = self.env['agencias.configuracion']
-        conf_id = conf_obj.search([])
+        conf_id = conf_obj.search([]) # Metodo Search Recibe un listado de condiciones, cada condicion consta de 3 partes, el campo a buscar, la condicionante y el valor.
         print "######## conf_id >>>> ",conf_id
         # Search = Listado de Registros que concuerden con la busqueda
         if conf_id:
