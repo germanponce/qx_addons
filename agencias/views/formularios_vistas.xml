@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- <record id="" model="ir.ui.view">
+            <field name="name"></field>
+            <field name="model">t</field>
+            <field name="arch" type="xml">
+                <form string="">
+                   <sheet>
+                       
+                    </sheet>
+                </form>
+            </field>
+        </record> -->
+
+        <record id="mi_marca" model="fleet.vehicle.model.brand">
+            <field name="name">QX Motors</field>
+        </record>
+
+        <record id="action_marcas_autos_id" model="ir.actions.act_window">
+            <field name="name">Versiones Autos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">versiones.autos</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="agencias_confi_act" model="ir.actions.act_window">
+            <field name="name">Configuracion</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">agencias.configuracion</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_agencias_principal" name="Agencias" sequence="0"/>
+
+        <menuitem id="menu_agencias_conf" name="Configuracion" sequence="10" parent="menu_agencias_principal"/>
+
+        <menuitem id="menu_agencias_configuracion_reg" name="Configuracion" sequence="10" parent="menu_agencias_conf" action="agencias_confi_act"/>
+
+        <menuitem id="menu_versiones" name="Versiones Autos" sequence="0" parent="menu_agencias_conf" action="action_marcas_autos_id"/>
+
+    </data>
+</odoo>
