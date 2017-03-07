@@ -101,9 +101,22 @@ class versiones_autos(models.Model):
     def copy(self, default=None):
         print "############## COPY >>>> "
         print "############## DEFAULT >>>> ",default
+        name = self.name
+        if 'COPIA' in name:
+            try:
+                number = int(name[-2])
+                number = number+1
+                name = name.split(' (COPIA')
+                print "######## NAME >>> ", name
+                name = name[0]
+                name = name+" (COPIA %s)" % str(number)
+            except:
+                name = self.name+" (COPIA %s)" % str(self.id)
+        else:
+            name = self.name+" (COPIA 1)"
         default.update({
                 'doors_n': 5,
-                'name': self.name+" (COPIA)",
+                'name': name,
             })
 
         return super(versiones_autos, self).copy(default)
