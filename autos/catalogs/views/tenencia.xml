@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
+		<record id="autos_catalogo_tenencia_tree" model="ir.ui.view">
+			<field name="name">autos.catalogo.tenencia.tree</field>
+			<field name="model">autos.catalogo.tenencia</field>
+			<field name="arch" type="xml">
+				<tree string = "Listado de Tenencia">
+					<field name="limite_inferior" />
+					<field name="limite_superior" />
+					<field name="porcentaje" />
+					<field name="cuota" />
+				</tree>
+				
+			</field>
+		</record>
+		<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
+		<record id="autos_catalogo_tenencia_form" model="ir.ui.view">
+			<field name="name">autos.catalogo.tenencia.form</field>
+			<field name="model">autos.catalogo.tenencia</field>
+			<field name="arch" type="xml">
+				<form string = "Formulario de tenencia" version="9.0">					
+					<sheet>
+						<group > <!-- colspan/col -->
+							<field name="limite_inferior" />
+							<field name="limite_superior" />
+							<field name="porcentaje" />
+							<field name="cuota" />
+						</group>
+					</sheet>
+				</form>
+				
+			</field>
+		</record>
+
+	<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
+		<record id="autos_catalogo_tenencia_action" model="ir.actions.act_window">
+			<field name="name">Tenencia</field>
+			<field name="res_model">autos.catalogo.tenencia</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click en crear para una nueva tenencia.
+				</p>
+			</field>
+		</record>	
+
+	</data>
+	
+</openerp>

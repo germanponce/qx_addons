@@ -41,8 +41,18 @@ class versiones_autos(models.Model):
     key_v = fields.Char('Clave Comercial', size=128)
     key_c = fields.Char('Clave Vehicular', size=128)
     fuel_type = fields.Selection(fuel_type,'Tipo Motor') ##Char, size
-    passengers = fields.Integers('Pasajeros')
-    cylinders = fields.Integers('Cilindros')
+    passengers = fields.Integer('Pasajeros')
+    cylinders = fields.Integer('Cilindros')
+    price_base = fields.Float('Precio Base', digits=(14,6))
+    price_pb_mn = fields.Float('Publico MN', digits=(14,6))
+    holdback = fields.Float('HoldBack', digits=(14,6))
+    imp_y = fields.Boolean('Es de Importacion')
+    ch_y = fields.Boolean('Es un Auto para Carga')
+    transm_type = fields.Selection([
+                                    ('automatico','Automatico'),
+                                    ('estandar','Estandar'),
+                                    ],'Tipo de Transmision')
+    doors_n = fields.Integer('No. Puertas')
 
 class agencias_tipo_auto(models.Model):
     _name = 'agencias.tipo.auto'

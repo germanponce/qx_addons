@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<record id="autos_catalogo_factortenencia_tree" model="ir.ui.view">
+			<field name="name">Factor Tenencia</field>
+			<field name="model">autos.catalogo.factortenencia</field>
+			<field name="arch" type="xml">
+				<tree string = "Factor Tenencia">
+					<field name="mes" />
+					<field name="factor"/>
+					<field name="active" invisible = "True" attrs="{'invisible':True}"/>
+				</tree>
+				
+			</field>
+		</record>
+		<record id="autos_catalogo_factortenencia_form" model="ir.ui.view">
+			<field name="name">Formulario de factor tenencia</field>
+			<field name="model">autos.catalogo.factortenencia</field>
+			<field name="arch" type="xml">
+				<form string = "Formulario de Factor Tenencia" version="9.0">
+					<sheet>
+						<group > <!-- colspan/col -->
+							<field name="mes" />
+							<field name="factor" />
+							<field name="active" invisible = "True" attrs="{'invisible':True}"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="autos_catalogo_factortencia_action" model="ir.actions.act_window">
+			<field name="name">Factor Tenencia</field>
+			<field name="res_model">autos.catalogo.factortenencia</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click en crear para un nuevo factor tenencia.
+				</p>
+			</field>
+		</record>	
+
+	</data>
+	
+</openerp>

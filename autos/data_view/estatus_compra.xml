@@ -1,0 +1,19 @@
+<odoo>
+    <data>
+          <record id="estatus_compraB" model="autos.catalogo.estatus.compra">
+            <field name="codestatus">B</field>
+            <field name="estatus">Borrador</field>
+        </record>
+
+        <record id="estatus_CompraC" model="autos.catalogo.estatus.compra">
+            <field name="codestatus">C</field>
+            <field name="estatus">Confirmada</field>
+        </record>
+
+        <record id="estatus_CompraX" model="autos.catalogo.estatus.compra">
+            <field name="codestatus">X</field>
+            <field name="estatus">Cancelada</field>
+        </record>
+
+    </data>
+</odoo>

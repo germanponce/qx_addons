@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="TipoRebateE" model="autos.catalogo.tipo.rebate">
+            <field name="id_tipo_rebate">E</field>
+            <field name="tipo_rebate">Nota Credito y CxC</field>
+        </record>
+
+		 <record id="TipoRebateF" model="autos.catalogo.tipo.rebate">
+            <field name="id_tipo_rebate">F</field>
+            <field name="tipo_rebate">CxC</field>
+        </record>
+
+		 <record id="TipoRebateN" model="autos.catalogo.tipo.rebate">
+            <field name="id_tipo_rebate">N</field>
+            <field name="tipo_rebate">Nota Credito</field>
+        </record>
+
+ 		<record id="TipoRebateS" model="autos.catalogo.tipo.rebate">
+            <field name="id_tipo_rebate">S</field>
+            <field name="tipo_rebate">CxP</field>
+        </record>
+
+		 <record id="TipoRebateV" model="autos.catalogo.tipo.rebate">
+            <field name="id_tipo_rebate">V</field>
+            <field name="tipo_rebate">Sin movimiento</field>
+        </record>
+
+	</data>
+</odoo>

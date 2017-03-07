@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.13 virtualenv at C:\Users\Moises\odoo10" project-jdk-type="Python SDK" />
+  <component name="SvnBranchConfigurationManager">
+    <option name="myConfigurationMap">
+      <map>
+        <entry key="$PROJECT_DIR$">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchUrls">
+                <list>
+                  <option value="https://svn.riouxsvn.com/custom/.idea" />
+                  <option value="https://svn.riouxsvn.com/custom/branches" />
+                  <option value="https://svn.riouxsvn.com/custom/conf" />
+                  <option value="https://svn.riouxsvn.com/custom/db" />
+                  <option value="https://svn.riouxsvn.com/custom/hooks" />
+                  <option value="https://svn.riouxsvn.com/custom/locks" />
+                  <option value="https://svn.riouxsvn.com/custom/tags" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://svn.riouxsvn.com/custom/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="mySupportsUserInfoFilter" value="true" />
+  </component>
+</project>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="1u" model="autos.catalogo.ubicaciones">
+            <field name="descripcion">Almacen</field>
+        </record>
+
+		 <record id="2u" model="autos.catalogo.ubicaciones">
+            <field name="descripcion">Piso</field>
+         </record>
+
+		 <record id="3u" model="autos.catalogo.ubicaciones">
+            <field name="descripcion">Taller</field>
+        </record>
+
+	</data>
+</odoo>

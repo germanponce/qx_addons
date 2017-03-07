@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
+		<record id="autos_catalogo_marcas_tree" model="ir.ui.view">
+			<field name="name">autos.catalogo.marcas.tree</field>
+			<field name="model">autos.catalogo.marcas</field>
+			<field name="arch" type="xml">
+				<tree string = "Listado de Marcas">
+					<field name="marca" />
+					<field name="cuenta" />
+					<field name="espropia" />
+					<field name="active" invisible = "True" attrs="{'invisible':True}"/>
+				</tree>
+				
+			</field>
+		</record>
+		<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
+		<record id="autos_catalogo_marcas_form" model="ir.ui.view">
+			<field name="name">autos.catalogo.marcas.form</field>
+			<field name="model">autos.catalogo.marcas</field>
+			<field name="arch" type="xml">
+				<form string = "Formulario de marcas" version="9.0">
+					<sheet>
+						<group > <!-- colspan/col -->
+							<field name="marca" />
+							<field name="cuenta" />
+							<field name="espropia" />
+							<field name="active" invisible = "True" attrs="{'invisible':True}"/>
+						</group>
+					</sheet>
+				</form>
+				
+			</field>
+		</record>
+
+	<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
+		<record id="autos_catalogo_marcas_action" model="ir.actions.act_window">
+			<field name="name">Listado de Marcas</field>
+			<field name="res_model">autos.catalogo.marcas</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click en crear para una nueva marca.
+				</p>
+			</field>
+		</record>	
+
+	</data>
+	
+</openerp>

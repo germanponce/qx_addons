@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="1tt" model="autos.catalogo.tipo.transmision">
+            <field name="descripcion">Automatica</field>
+        </record>
+
+		 <record id="2tt" model="autos.catalogo.tipo.transmision">
+            <field name="descripcion">Manual</field>
+        </record>
+
+		 <record id="3tt" model="autos.catalogo.tipo.transmision">
+            <field name="descripcion">Triptronic</field>
+        </record>
+	</data>
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="1tv" model="autos.catalogo.tipo.vehiculo">
+            <field name="tipo_vehiculo">Sedan</field>
+        </record>
+
+		 <record id="2tv" model="autos.catalogo.tipo.vehiculo">
+            <field name="tipo_vehiculo">Camion</field>
+        </record>
+
+		 <record id="3tv" model="autos.catalogo.tipo.vehiculo">
+            <field name="tipo_vehiculo">Camioneta</field>
+        </record>
+
+ 		<record id="4tv" model="autos.catalogo.tipo.vehiculo">
+            <field name="tipo_vehiculo">HashBack</field>
+        </record>
+
+		 <record id="5tv" model="autos.catalogo.tipo.vehiculo">
+            <field name="tipo_vehiculo">Motocicleta</field>
+        </record>
+	</data>
+</odoo>

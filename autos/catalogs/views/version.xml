@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<record id="autos_catalogo_version_tree" model="ir.ui.view">
+			<field name="name">Lista de version</field>
+			<field name="model">autos.catalogo.version</field>
+			<field name="arch" type="xml">
+				<tree string = "Version de los autos">
+					<field name="marcas" />
+					<field name="tipo_auto" />
+				</tree>
+				
+			</field>
+		</record>
+		<record id="autos_catalogo_version_form" model="ir.ui.view">
+			<field name="name">Formulario de version</field>
+			<field name="model">autos.catalogo.version</field>
+			<field name="arch" type="xml">
+				<form string = "Formulario de Version" version="9.0">
+					<sheet>
+						<group col='4'> 
+							<field name="marcas" on_change="my_onchange_function(marcas)"/>
+							<label string='Precio Base' colspan="2"/>
+							<field name='tipo_auto' domain="[('marca','=',marcas)]" />
+							<field name='precio_publico_mn'/>
+							<field name='version_auto'/>
+							<field name='precio_publico_me'/>
+							<field name='tipo_vehiculo'/>
+							<field name='holdback'/>
+							<field name='cve_comercial'/>
+							<field name='importacion'/>
+							<field name='cve_vehicular'/>
+							<field name='carga'/>
+							<field name='tipo_motor'/>
+							<field name='tipo_transmision'/>
+							<field name='cilindros'/>
+							<field name='puertas'/>
+							<field name='pasajeros'/>
+						</group> 
+					</sheet>
+					 <notebook>
+				     <page string="Accesorios">
+				       <field name="accesorios" widget="many2many"/>
+				     </page>  
+				     <page string="Colores Exteriores">
+				         <field name='color_exterior'/>
+				     </page> 
+				      <page string="Colores Interiores">
+				         <field name='color_interior'/>
+				     </page>    
+				 </notebook>
+				</form>
+				
+			</field>
+		</record>
+		<record id="autos_catalogo_version_action" model="ir.actions.act_window">
+			<field name="name">Version</field>
+			<field name="res_model">autos.catalogo.version</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click en crear para una nueva version.
+				</p>
+			</field>
+		</record>	
+
+	</data>
+	
+</openerp>

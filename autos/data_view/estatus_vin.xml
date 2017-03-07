@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="estatus_vinA" model="autos.catalogo.estatus.vin">
+            <field name="idestatus">A</field>
+            <field name="descripcion">Apartado</field>
+        </record>
+
+        <record id="estatus_vinC" model="autos.catalogo.estatus.vin">
+            <field name="idestatus">C</field>
+            <field name="descripcion">Cancelado</field>
+        </record>
+
+        <record id="estatus_vinD" model="autos.catalogo.estatus.vin">
+            <field name="idestatus">D</field>
+            <field name="descripcion">Disponible</field>
+        </record>
+
+        <record id="estatus_vinF" model="autos.catalogo.estatus.vin">
+            <field name="idestatus">F</field>
+            <field name="descripcion">Facturado</field>
+        </record>
+
+         <record id="estatus_vinS" model="autos.catalogo.estatus.vin">
+            <field name="idestatus">S</field>
+            <field name="descripcion">Salida</field>
+        </record>
+
+         <record id="estatus_vinT" model="autos.catalogo.estatus.vin">
+            <field name="idestatus">T</field>
+            <field name="descripcion">Transito</field>
+        </record>
+
+    </data>
+</odoo>

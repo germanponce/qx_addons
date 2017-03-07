@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
+		<record id="autos_catalogo_isan_tree" model="ir.ui.view">
+			<field name="name">autos.catalogo.isan.tree</field>
+			<field name="model">autos.catalogo.isan</field>
+			<field name="arch" type="xml">
+				<tree string = "Listado de Isan">
+					<field name="limite_inferior" />
+					<field name="limite_superior" />
+					<field name="porcentaje" />
+					<field name="cuota" />
+					<field name="cargo" />
+				</tree>
+				
+			</field>
+		</record>
+		<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
+		<record id="autos_catalogo_isan_form" model="ir.ui.view">
+			<field name="name">autos.catalogo.isan.form</field>
+			<field name="model">autos.catalogo.isan</field>
+			<field name="arch" type="xml">
+				<form string = "Formulario de Isan" version="9.0">					
+					<sheet>
+						<group > <!-- colspan/col -->
+							<field name="limite_inferior" />
+							<field name="limite_superior" />
+							<field name="porcentaje" />
+							<field name="cuota" />
+							<field name="cargo" />
+						</group>
+					</sheet>
+				</form>
+				
+			</field>
+		</record>
+
+	<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
+		<record id="autos_catalogo_isan_action" model="ir.actions.act_window">
+			<field name="name">ISAN</field>
+			<field name="res_model">autos.catalogo.isan</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click en crear para un nuevo ISAN.
+				</p>
+			</field>
+		</record>	
+
+	</data>
+	
+</openerp>

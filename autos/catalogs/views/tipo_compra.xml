@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<record id="autos_catalogo_tipo_compra_tree" model="ir.ui.view">
+			<field name="name">Lista de Tipos de Compra</field>
+			<field name="model">autos.catalogo.tipo.compra</field>
+			<field name="arch" type="xml">
+				<tree string = "Tipos de Compra">
+					<field name="descripcion" />
+					<field name="active" invisible = "True" attrs="{'invisible':True}"/>
+				</tree>
+				
+			</field>
+		</record>
+		<record id="autos_catalogo_tipo_compra_form" model="ir.ui.view">
+			<field name="name">Formulario de tipos de compra</field>
+			<field name="model">autos.catalogo.tipo.compra</field>
+			<field name="arch" type="xml">
+				<form string = "Formulario de Tipos de Compra" version="9.0">
+					<sheet>
+						<group > <!-- colspan/col -->
+							<field name="descripcion" />
+							<field name="active" invisible = "True" attrs="{'invisible':True}"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="autos_catalogo_tipo_compra_action" model="ir.actions.act_window">
+			<field name="name">Tipos de Compra</field>
+			<field name="res_model">autos.catalogo.tipo.compra</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click en crear para una nueva tipo compra.
+				</p>
+			</field>
+		</record>	
+
+	</data>
+	
+</openerp>

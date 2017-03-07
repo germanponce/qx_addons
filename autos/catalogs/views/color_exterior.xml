@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
+		<record id="autos_catalogo_color_exterior_tree" model="ir.ui.view">
+			<field name="name">autos.catalogo.color.exterior.tree</field>
+			<field name="model">autos.catalogo.color.exterior</field>
+			<field name="arch" type="xml">
+				<tree string = "Color Exterior">
+					<field name="code_color" />
+					<field name="color" />
+					<field name="active" invisible = "True" attrs="{'invisible':True}"/>
+				</tree>				
+			</field>
+		</record>
+		<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
+		<record id="autos_catalogo_color_exterior_form" model="ir.ui.view">
+			<field name="name">autos.catalogo.color.exterior.form</field>
+			<field name="model">autos.catalogo.color.exterior</field>
+			<field name="arch" type="xml">
+				<form string = "Color Exterior" version="9.0">					
+					<sheet>
+						<group > <!-- colspan/col -->
+							<field name="code_color" />
+							<field name="color" />
+							<field name="active" invisible = "True" attrs="{'invisible':True}"/>
+						</group>
+					</sheet>
+				</form>
+				
+			</field>
+		</record>
+
+	<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
+		<record id="autos_catalogo_color_exterior_action" model="ir.actions.act_window">
+			<field name="name">Color Exterior</field>
+			<field name="res_model">autos.catalogo.color.exterior</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click en crear para un nuevo color exterior.
+				</p>
+			</field>
+		</record>	
+
+	</data>
+	
+</openerp>

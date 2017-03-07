@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+	
+		<!-- Menu para odoo Menu Principal -->
+		<menuitem id="autos_menu" name="Autos"/>
+
+			<!-- Sub menu de Catalogos -->
+			<menuitem id="autos_catalogos" parent="autos_menu" name="Catalogos" sequence="0" />		
+
+				<!-- Sub menu de Accesorios -->
+
+				<menuitem id="Accesorios" parent="autos_catalogos" name="Detalles" sequence="1" />		
+				
+					<menuitem id="autos_catalogo_accesorios" parent="Accesorios" name="Accesorios" sequence="1" action="autos_catalogo_accesorios_action" />
+				
+					<menuitem id="autos_catalogo_color_interior" parent="Accesorios" name="Color Interior" sequence="2" action="autos_catalogo_color_interior_action" />
+ 				
+ 					<menuitem id="autos_catalogo_color_exterior" parent="Accesorios" name="Color Exterior" sequence="3" action="autos_catalogo_color_exterior_action" /> 
+
+ 				<!-- Termina Sub menu de Accesorios -->
+
+ 				<!-- Sub menu de Configuracion Ventas -->
+
+ 				<menuitem id="ConfiguracionVentas" parent="autos_catalogos" name="Configuracion Ventas" sequence="2" />	
+
+ 					<menuitem id="autos_catalogo_isan" parent="ConfiguracionVentas" name="Isan" sequence="1" action="autos_catalogo_isan_action" />
+
+					<menuitem id="autos_catalogo_tenencia" parent="ConfiguracionVentas" name="Tenencia" sequence="2" action="autos_catalogo_tenencia_action" />
+
+					<menuitem id="autos_catalogo_tipo_gasto" parent="ConfiguracionVentas" name="Tipo de Gasto" sequence="3" action="autos_catalogo_tipo_gasto_action" />
+
+					<menuitem id="autos_catalogo_concepto_rebate_f" parent="ConfiguracionVentas" name="Concepto de Rebate Formulario" sequence="4" action="autos_catalogo_concepto_rebate_f_action" />
+
+					<menuitem id="autos_catalogo_factortenencia" parent="ConfiguracionVentas" name="Factor de Tenencia" sequence="5" action="autos_catalogo_factortencia_action" />
+
+				<!-- Termina Sub Menu de Configuracion Ventas -->
+
+				<!-- Sub menu de Autos -->
+
+				<menuitem id="Autos" parent="autos_catalogos" name="Autos" sequence="3" />	
+					<menuitem id="autos_catalogo_tipo_vehiculo" parent="Autos" name="Tipo de Vehiculo" sequence="1" action="autos_catalogo_tipo_vehiculo_action" />
+
+					<menuitem id="autos_catalogo_tipo_motor" parent="Autos" name="Tipo de Motor" sequence="2" action="autos_catalogo_tipo_motor_action" />
+			
+					<menuitem id="autos_catalogo_tipo_transmision" parent="Autos" name="Tipo de Transmision" sequence="3" action="autos_catalogo_tipo_transmision_action" />
+
+					<menuitem id="autos_catalogo_ubicaciones" parent="Autos" name="Ubicaciones" sequence="4" action="autos_catalogo_ubicaciones_action" /> 
+
+					<menuitem id="autos_catalogo_almacenes" parent="Autos" name="Almacenes" sequence="5" action="autos_catalogo_almacenes_action" /> 
+
+					<menuitem id="autos_catalogo_tipo_venta" parent="Autos" name="Tipo Venta" sequence="6" action="autos_catalogo_tipo_venta_action" /> 
+
+					<menuitem id="autos_catalogo_tipo_compra" parent="Autos" name="Tipo Compra" sequence="7" action="autos_catalogo_tipo_compra_action" /> 
+
+				 	<menuitem id="autos_catalogo_marcas" parent="Autos" name="Marcas de Autos" sequence="8" action="autos_catalogo_marcas_action" />
+
+					<menuitem id="autos_catalogo_tipoauto" parent="Autos" name="Tipos de Autos" sequence="9" action="autos_catalogo_tipo_auto_action" />
+					
+					<menuitem id="autos_catalogo_versiones" parent="Autos" name="Version de autos" sequence="10" action="autos_catalogo_version_action" />
+				<!--Termina Sub Menu Autos -->
+
+				<!--Inicia Sub Menu Compras -->
+
+				<menuitem id="autos_compras" parent="autos_menu" name="Compras" sequence="10" />
+					 <!--Sub menu de Compras-->
+					<menuitem id="Compras_Autos_Nuevos" parent="autos_compras" name="Compras Autos Nuevos" sequence="1" action="autos_procesos_compras_action" />
+
+
+	</data> 
+</openerp>

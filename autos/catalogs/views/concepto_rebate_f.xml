@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
+		<record id="autos_catalogo_concepto_rebate_f_tree" model="ir.ui.view">
+			<field name="name">autos.catalogo.concepto.rebate.f.tree</field>
+			<field name="model">autos.catalogo.concepto.rebate.f</field>
+			<field name="arch" type="xml">
+				<tree string = "Tipos de motor">
+					<field name="descripcion" />
+					<field name="tipo_rebate" />
+					<field name="cliente" />
+					<field name="cartera" />
+					<field name="proveedor" />
+				</tree>
+				
+			</field>
+		</record>
+		<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
+		<record id="autos_catalogo_concepto_rebate_f_form" model="ir.ui.view">
+			<field name="name">autos.catalogo.concepto.rebate.f.form</field>
+			<field name="model">autos.catalogo.concepto.rebate.f</field>
+			<field name="arch" type="xml">
+				<form string = "Tipos de motor" version="9.0">
+					<sheet>
+						<group > <!-- colspan/col -->
+							<field name="descripcion" />
+							<field name="tipo_rebate" />
+							<field name="cliente" />
+							<field name="cartera" />
+							<field name="proveedor" />
+						</group>
+					</sheet>
+				</form>
+				
+			</field>
+		</record>
+
+	<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
+		<record id="autos_catalogo_concepto_rebate_f_action" model="ir.actions.act_window">
+			<field name="name">Concepto de Rebate</field>
+			<field name="res_model">autos.catalogo.concepto.rebate.f</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click en crear para un nuevo concepto rebate.
+				</p>
+			</field>
+		</record>	
+
+	</data>
+	
+</openerp>

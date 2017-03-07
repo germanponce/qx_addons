@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="1tm" model="autos.catalogo.tipo.motor">
+            <field name="tipo_motor">Gasolina</field>
+        </record>
+
+		 <record id="2tm" model="autos.catalogo.tipo.motor">
+            <field name="tipo_motor">Disel</field>
+        </record>
+
+		 <record id="3tm" model="autos.catalogo.tipo.motor">
+            <field name="tipo_motor">Electrico</field>
+        </record>
+
+ 		<record id="4tm" model="autos.catalogo.tipo.motor">
+            <field name="tipo_motor">Biodisel</field>
+        </record>
+
+		 <record id="5tm" model="autos.catalogo.tipo.motor">
+            <field name="tipo_motor">Hibrido</field>
+        </record>
+	</data>
+</odoo>

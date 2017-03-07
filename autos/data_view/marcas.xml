@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="Nissan" model="autos.catalogo.marcas">
+            <field name="marca">Nissan</field>
+            <field name="espropia">f</field>
+        </record>
+
+		 <record id="Chevrolet" model="autos.catalogo.marcas">
+            <field name="marca">Chevrolet</field>
+            <field name="espropia">f</field>
+        </record>
+
+		 <record id="KIA" model="autos.catalogo.marcas">
+            <field name="marca">KIA</field>
+            <field name="espropia">f</field>
+        </record>
+
+ 		<record id="Honda" model="autos.catalogo.marcas">
+            <field name="marca">Honda</field>
+            <field name="espropia">f</field>
+        </record>
+
+		 <record id="Ford" model="autos.catalogo.marcas">
+            <field name="marca">Ford</field>
+           <field name="espropia">f</field>
+        </record>
+	</data>
+</odoo>

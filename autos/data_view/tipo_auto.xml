@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="1ta" model="autos.catalogo.tipo.auto">
+            <field name="marca">1</field>
+            <field name="descripcion">Versa</field>
+        </record>
+
+		 <record id="2ta" model="autos.catalogo.tipo.auto">
+            <field name="marca">1</field>
+            <field name="descripcion">Sentra</field>
+        </record>
+
+		 <record id="3ta" model="autos.catalogo.tipo.auto">
+            <field name="marca">1</field>
+            <field name="descripcion">Altima</field>
+        </record>
+
+ 		<record id="4ta" model="autos.catalogo.tipo.auto">
+            <field name="marca">2</field>
+            <field name="descripcion">Aveo</field>
+        </record>
+
+		 <record id="5ta" model="autos.catalogo.tipo.auto">
+            <field name="marca">2</field>
+            <field name="descripcion">Cruz</field>
+        </record>
+
+         <record id="6ta" model="autos.catalogo.tipo.auto">
+            <field name="marca">2</field>
+            <field name="descripcion">Malibu</field>
+        </record>
+
+        <record id="4ta" model="autos.catalogo.tipo.auto">
+            <field name="marca">3</field>
+            <field name="descripcion">Rio</field>
+        </record>
+
+		 <record id="5ta" model="autos.catalogo.tipo.auto">
+            <field name="marca">3</field>
+            <field name="descripcion">Optima</field>
+        </record>
+
+         <record id="6ta" model="autos.catalogo.tipo.auto">
+            <field name="marca">3</field>
+            <field name="descripcion">Forte</field>
+        </record>
+
+         <record id="7ta" model="autos.catalogo.tipo.auto">
+            <field name="marca">4</field>
+            <field name="descripcion">City</field>
+        </record>
+
+		 <record id="8ta" model="autos.catalogo.tipo.auto">
+            <field name="marca">4</field>
+            <field name="descripcion">Civic</field>
+        </record>
+
+         <record id="9ta" model="autos.catalogo.tipo.auto">
+            <field name="marca">4</field>
+            <field name="descripcion">Accor</field>
+        </record>
+
+
+        <record id="10ta" model="autos.catalogo.tipo.auto">
+            <field name="marca">5</field>
+            <field name="descripcion">Fiesta</field>
+        </record>
+
+		 <record id="11ta" model="autos.catalogo.tipo.auto">
+            <field name="marca">5</field>
+            <field name="descripcion">Aveo</field>
+        </record>
+
+         <record id="12ta" model="autos.catalogo.tipo.auto">
+            <field name="marca">5</field>
+            <field name="descripcion">Fusion</field>
+        </record>
+
+
+	</data>
+</odoo>

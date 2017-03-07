@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<record id="autos_catalogo_tipo_venta_tree" model="ir.ui.view">
+			<field name="name">Lista de Tipo Venta</field>
+			<field name="model">autos.catalogo.tipo.venta</field>
+			<field name="arch" type="xml">
+				<tree string = "Tipos de Venta">
+					<field name="descripcion" />
+					<field name="cuenta" />
+					<field name="ventaespecial" />
+					<field name="active" invisible = "True" attrs="{'invisible':True}"/>
+				</tree>
+			</field>
+		</record>
+		<record id="autos_catalogo_tipo_venta_form" model="ir.ui.view">
+			<field name="name">Formulario de Tipos de Venta</field>
+			<field name="model">autos.catalogo.tipo.venta</field>
+			<field name="arch" type="xml">
+				<form string = "Formulario de Tipos de Venta" version="9.0">
+					<sheet>
+						<group > <!-- colspan/col -->
+							<field name="descripcion" />
+							<field name="cuenta" />
+							<field name="ventaespecial" />
+							<field name="active" invisible = "True" attrs="{'invisible':True}"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="autos_catalogo_tipo_venta_action" model="ir.actions.act_window">
+			<field name="name">Tipos de Venta</field>
+			<field name="res_model">autos.catalogo.tipo.venta</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click en crear para un nuevo tipo de venta.
+				</p>
+			</field>
+		</record>	
+	</data>
+</openerp>
