@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
+from openerp.exceptions import UserError, RedirectWarning, ValidationError
 
 type_vehicle = [('camioneta','Camioneta'),
                 ('auto','Auto'),
@@ -39,8 +40,8 @@ class versiones_autos(models.Model):
     type_car_id = fields.Many2one('agencias.tipo.auto','Tipo de Auto') ##Char, size
     name = fields.Char('Version', size=128, required=True)
     type_vehicle_id = fields.Selection(type_vehicle,'Tipo de Vehiculo', default="camioneta") ##Char, size
-    key_v = fields.Char('Clave Comercial', size=128)
-    key_c = fields.Char('Clave Vehicular', size=128)
+    key_v = fields.Char('Clave Comercial', size=128, copy=False)
+    key_c = fields.Char('Clave Vehicular', size=128, copy=False)
     fuel_type = fields.Selection(fuel_type,'Tipo Motor') ##Char, size
     passengers = fields.Integer('Pasajeros')
     cylinders = fields.Integer('Cilindros')
@@ -55,6 +56,65 @@ class versiones_autos(models.Model):
                                     ],'Tipo de Transmision')
     doors_n = fields.Integer('No. Puertas')
     image = fields.Binary('Imagen')
+
+    @api.model # Self, cr, uid, ids, context
+    def create(self, vals):
+        print "######## VALS >>> ",vals
+        doors_n = vals['doors_n'] if 'doors_n' in vals else False
+        name = vals['name'] if 'name' in vals else False
+        name = name.strip(' ')
+        print "######### context >>> ", self._context
+        print "######### DOOR N >>>> ", doors_n
+        other_id = self.search([('name','=',name)])
+        if other_id:
+            raise UserError(_('El Registro ya existe en la Base de Datos, prueba con uno diferente.'))
+        res = super(versiones_autos, self).create(vals)
+        if not doors_n: ### 0, False,[],()= Null
+            raise UserError(_('El campo No. de Puertas es Incorrecto.\nIngresa uno de los Valores: [3, 5]'))
+        elif doors_n not in (3,5):
+            raise UserError(_('El campo No. de Puertas es Incorrecto.\nIngresa uno de los Valores: [3, 5]'))
+        print "############### CREATE >>> ",res
+        ##### Recordset
+        return res
+
+    @api.multi
+    def write(self, vals):
+        print "######## WRITE >>> "
+        print "######## VALS >>> ",vals
+        print "######## IDS ", self._ids
+        doors_n = vals['doors_n'] if 'doors_n' in vals else False
+        if doors_n:
+            if doors_n not in (3,5):
+                raise UserError(_('El campo No. de Puertas es Incorrecto.\nIngresa uno de los Valores: [3, 5]'))
+        name = vals['name'] if 'name' in vals else False
+        if name:
+            name = name.strip(' ')
+            other_id = self.search([('name','=',name)])
+            if other_id:
+                raise UserError(_('El Registro ya existe en la Base de Datos, prueba con uno diferente.'))
+            res = super(versiones_autos, self).write(vals)
+        ##### Recordset
+        return res
+
+    @api.one
+    @api.returns('self', lambda value: value.id)
+    def copy(self, default=None):
+        print "############## COPY >>>> "
+        print "############## DEFAULT >>>> ",default
+        default.update({
+                'doors_n': 5,
+                'name': self.name+" (COPIA)",
+            })
+
+        return super(versiones_autos, self).copy(default)
+
+
+### Clase ORM
+# Creacion = create
+# Actualizacion = write
+# Eliminacion = unlink
+# Duplicado = copy
+# Lectura = read
 
 class agencias_tipo_auto(models.Model):
     _name = 'agencias.tipo.auto'
