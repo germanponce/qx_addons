@@ -11,7 +11,7 @@
 			""",
 	"website": "http://www.google.com.mx/",
 	"license":"AGPL-3",
-	"depends":["sale","account","account_accountant"],
+	"depends":["sale","account","account_accountant","purchase"],
 	"init_xml":[],
 	"demo":[],
 	"data":[
@@ -40,7 +40,7 @@
 					
 					# Load Data Default
 					"data_view/estatus_vin.xml",
-					"data_view/tipo_rebate.xml",
+					# "data_view/tipo_rebate.xml",
 					"data_view/marcas.xml",
 					"data_view/tipo_motor.xml",
 					"data_view/tipo_vehiculo.xml",

@@ -5,7 +5,7 @@
 			<field name="name">Lista de version</field>
 			<field name="model">autos.catalogo.version</field>
 			<field name="arch" type="xml">
-				<tree string = "Version de los autos">
+				<tree string="Version de los autos">
 					<field name="marcas" />
 					<field name="tipo_auto" />
 				</tree>
@@ -16,7 +16,7 @@
 			<field name="name">Formulario de version</field>
 			<field name="model">autos.catalogo.version</field>
 			<field name="arch" type="xml">
-				<form string = "Formulario de Version" version="9.0">
+				<form string="Formulario de Version" version="9.0">
 					<sheet>
 						<group col='4'> 
 							<field name="marcas" on_change="my_onchange_function(marcas)"/>
@@ -36,19 +36,22 @@
 							<field name='cilindros'/>
 							<field name='puertas'/>
 							<field name='pasajeros'/>
-						</group> 
+						</group>
+						 <notebook>
+						 	<page string="Atributos">
+							     <group string="Accesorios">
+							       <field name="accesorios" widget="many2many_tags" />
+							     </group>  
+							     <group string="Colores Exteriores">
+							         <field name='color_exterior' widget="many2many_tags"/>
+							     </group> 
+							      <group string="Colores Interiores">
+							         <field name='color_interior' widget="many2many_tags"/>
+							     </group>    
+							 </page>
+						 </notebook>
 					</sheet>
-					 <notebook>
-				     <page string="Accesorios">
-				       <field name="accesorios" widget="many2many"/>
-				     </page>  
-				     <page string="Colores Exteriores">
-				         <field name='color_exterior'/>
-				     </page> 
-				      <page string="Colores Interiores">
-				         <field name='color_interior'/>
-				     </page>    
-				 </notebook>
+					
 				</form>
 				
 			</field>

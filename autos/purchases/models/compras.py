@@ -5,6 +5,7 @@ from odoo import fields, models, api,exceptions
 import odoo.addons.decimal_precision as dp
 
 
+# class autos_compras_datos_vin(models.Model):
 class autos_compras_datos_vin(models.Model):
     _name = 'autos.compras.datos.vin'
     vin = fields.Char('Vin', size=17, required=True)
@@ -118,6 +119,8 @@ class autos_proceso_compras(models.Model):
         'autos.compras.datos.compra': 'datoscompra_id',
         'autos.compras.datos.equipo': 'equipo_id',
         'autos.compras.datos.informacion': 'informacion_id',
+        'purchase.order': 'purchase_id', # Argil
+
     }
 
     def _default_estatus_compra(self):
@@ -126,12 +129,12 @@ class autos_proceso_compras(models.Model):
 
     cod_compra = fields.Char('Cod Compra', help='Codigo Compra')
     nocompra = fields.Char('No Compra', help='No de compra que le asigna el sistema')
-    fecha = fields.Date('Fecha Compra', required=True, default=fields.Date.today)
+    # fecha = fields.Date('Fecha Compra', required=True, default=fields.Date.today)
     autos_vin = fields.Many2one('autos.vin', required=True, ondelete='cascade')
     tipo_compra = fields.Many2one('autos.catalogo.tipo.compra', 'Tipo Compra', required=True)
     estatus_compra = fields.Many2one('autos.catalogo.estatus.compra', 'Estatus de la Compra', required=True, default=_default_estatus_compra, index=True)
-    proveedor = fields.Many2one('res.partner', 'Proveedor', required=True, help='Proveedor al que se le hace la compra')
-    facturaproveedor = fields.Char('Factura', size=10, required=True)
+    # proveedor = fields.Many2one('res.partner', 'Proveedor', required=True, help='Proveedor al que se le hace la compra')
+    facturaproveedor = fields.Many2one('account.invoice','Factura', required=True)
     vencimiento_factura = fields.Date('Fecha Vencimiento Factura', required=True,
                                       help='Fecha en la que se vence la Factura', default=fields.Date.today)
     propio = fields.Boolean('Es Propio')
@@ -247,5 +250,8 @@ class autos_proceso_compras(models.Model):
             return super(autos_proceso_compras, self).create(values)
 
     
-
-
+class res_partner(models.Model):
+    _name = 'res.partner'
+    _inherit ='res.partner'
+ 
+    concesionario = fields.Boolean('Es Concesionario')
