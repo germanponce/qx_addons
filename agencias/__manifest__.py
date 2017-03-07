@@ -10,7 +10,7 @@ Este modulo permite practicar la programación de Odoo.
     """,
     'category': 'Educacion',
     'website': 'https://www.argil.mx',
-    'depends' : ['fleet'],
+    'depends' : ['fleet','mail'],
     'data': [
     'views/formularios_vistas.xml',
     ],

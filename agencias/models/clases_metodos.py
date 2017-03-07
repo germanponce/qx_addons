@@ -9,6 +9,7 @@ fuel_type = [('gasoline', 'Gasolina'), ('diesel', 'Diesel'), ('electric', 'Elect
 
 class versiones_autos(models.Model):
     _name = 'versiones.autos'
+    _inherit = ['mail.thread', 'ir.needaction_mixin']
     _description = 'Catalogo para Gestion de Versiones A.'
     # _rec_name = 'brand_id'
 
