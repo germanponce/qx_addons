@@ -89,7 +89,7 @@
     	                    <notebook>
     	                        <page string="Products">
     	                            <field name="order_line" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}">
-    	                                 <tree string="Purchase Order Lines" editable="bottom">
+    	                                 <tree string="Purchase Order Lines">
     	                                    <field name="state" invisible="1"/>
     	                                    <field name="sequence" widget="handle"/>
     	                                    <field name="product_id" attrs="{'readonly': [('state', 'in', ('purchase', 'to approve','done', 'cancel'))]}" context="{'partner_id':parent.partner_id, 'quantity':product_qty,'uom':product_uom, 'company_id': parent.company_id}"/>
@@ -128,6 +128,17 @@
     	                                            </group>
     	                                        </group>
     	                                        <notebook>
+    	                                        	<page string="Datos Compra Autos" >
+    	                                        	<group col="4">
+														<field name="color_exterior" required="1"/><!-- 
+														<field name="color_interior" required="1"/>
+														<field name="precio_publico_ext" required="1"/>
+														<field name="precio_publico_int" required="1"/>
+														<field name="distribuidor_ext" required="1"/>
+														<field name="distribuidor_int" required="1"/>
+														<field name="accesorios" required="1"/> -->
+													</group>
+												</page>
     	                                        <page string="Notes">
     	                                            <field name="name"/>
     	                                        </page><page string="Invoices and Incoming Shipments">
@@ -232,7 +243,7 @@
 										<field name="cuenta_contable_ext" />
 									</group>
 								</page>
-								<page string="Equipo de la Compra">
+								<!-- <page string="Equipo de la Compra">
 									<group col="4">
 										<field name="color_exterior" />
 										<field name="color_interior" />
@@ -242,7 +253,7 @@
 										<field name="distribuidor_int" />
 										<field name="accesorios" colspan="4" />
 									</group>
-								</page>
+								</page> -->
 								<page string="Informacion Especifica">
 									<group col="4">
                                         <field name="codigo_motor" />

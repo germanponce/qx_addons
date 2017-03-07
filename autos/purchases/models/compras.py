@@ -77,14 +77,14 @@ class autos_compras_datos_compra(models.Model):
     estatus_vin = fields.Many2one('autos.catalogo.estatus.vin', 'Estatus Vin', required=True)
 
 
-class autos_compras_equipo(models.Model):
-    _name = 'autos.compras.datos.equipo'
-    color_exterior = fields.Many2one('autos.catalogo.color.exterior', 'Color Exterior', required=True)
-    precio_publico_ext = fields.Float('Precio Publico', digits=(5, 5), required=True, readonly=False, help='Precio Publico')
-    distribuidor_ext = fields.Float('Distribuidor', digits=(5, 5), required=True, readonly=False, help='Distribuidor')
-    color_interior = fields.Many2one('autos.catalogo.color.interior', 'Color Interior', required=True)
-    precio_publico_int = fields.Float('Precio Publico', digits=(5, 5), required=True, readonly=False, help='Precio Publico')
-    distribuidor_int = fields.Float('Distribuidor', digits=(5, 5), required=True, readonly=False, help='Distribuidor')
+# class autos_compras_equipo(models.Model):
+#     _name = 'autos.compras.datos.equipo'
+#     color_exterior = fields.Many2one('autos.catalogo.color.exterior', 'Color Exterior', required=True)
+#     precio_publico_ext = fields.Float('Precio Publico', digits=(5, 5), required=True, readonly=False, help='Precio Publico')
+#     distribuidor_ext = fields.Float('Distribuidor', digits=(5, 5), required=True, readonly=False, help='Distribuidor')
+#     color_interior = fields.Many2one('autos.catalogo.color.interior', 'Color Interior', required=True)
+#     precio_publico_int = fields.Float('Precio Publico', digits=(5, 5), required=True, readonly=False, help='Precio Publico')
+#     distribuidor_int = fields.Float('Distribuidor', digits=(5, 5), required=True, readonly=False, help='Distribuidor')
 
 
 class autos_compras_datos_informacion(models.Model):
@@ -117,7 +117,7 @@ class autos_proceso_compras(models.Model):
         'autos.compras.documentos.extranjero': 'extranjero_id',
         'autos.compras.precios': 'precios_id',
         'autos.compras.datos.compra': 'datoscompra_id',
-        'autos.compras.datos.equipo': 'equipo_id',
+        # 'autos.compras.datos.equipo': 'equipo_id',
         'autos.compras.datos.informacion': 'informacion_id',
         'purchase.order': 'purchase_id', # Argil
 
@@ -249,7 +249,18 @@ class autos_proceso_compras(models.Model):
         else:
             return super(autos_proceso_compras, self).create(values)
 
+class purchase_order_line(models.Model):
+    _inherit ='purchase.order.line'
     
+    color_exterior = fields.Many2one('autos.catalogo.color.exterior', 'Color Exterior')
+    precio_publico_ext = fields.Float('Precio Publico', digits=(5, 5), required=False, readonly=False, help='Precio Publico')
+    distribuidor_ext = fields.Float('Distribuidor', digits=(5, 5), required=False, readonly=False, help='Distribuidor')
+    color_interior = fields.Many2one('autos.catalogo.color.interior', 'Color Interior', required=False)
+    precio_publico_int = fields.Float('Precio Publico', digits=(5, 5), required=False, readonly=False, help='Precio Publico')
+    distribuidor_int = fields.Float('Distribuidor', digits=(5, 5), required=False, readonly=False, help='Distribuidor')
+
+
+
 class res_partner(models.Model):
     _name = 'res.partner'
     _inherit ='res.partner'
