@@ -14,6 +14,61 @@
             </field>
         </record> -->
 
+        <record id="verion_formulario_id" model="ir.ui.view">
+            <field name="name">versiones.autos.form</field>
+            <field name="model">versiones.autos</field>
+            <field name="arch" type="xml">
+                <form string="">
+                   <!-- <head>
+                   </head> -->
+                   <sheet>
+                        <field name="image" widget="image" options="{&quot;preview_image&quot;: &quot;image&quot;, &quot;size&quot;: [90, 90]}"/>
+                    <div class="oe_title">
+                        <label class="oe_edit_only" for="name" string="Nombre de la Version"/>
+                        <h1><field name="name" placeholder="Version XXXXX"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="brand_id" />
+                            <field name="type_car_id" />
+                            <field name="type_vehicle_id" />
+                            <field name="key_v" />
+                            <field name="key_c" />
+                            <field name="fuel_type" />
+                            <field name="passengers" />
+                        </group>
+                        <group>
+                            <field name="cylinders" />
+                            <field name="price_base" />
+                            <field name="price_pb_mn" />
+                            <field name="holdback" />
+                            <field name="imp_y" />
+                            <field name="ch_y" />
+                            <field name="transm_type" />
+                            <field name="doors_n" />
+                        </group>
+                    </group>
+                   </sheet><!-- 
+                   <footer>
+                   </footer> -->
+                </form>
+            </field>
+        </record>
+        
+        <record id="versiones_autos_tree" model="ir.ui.view">
+            <field name="name">versiones.autos.tree</field>
+            <field name="model">versiones.autos</field>
+            <field name="arch" type="xml">
+                <tree string="Listado de Versiones">
+                    <field name="name" />
+                    <field name="brand_id" />
+                    <field name="type_car_id" />
+                    <field name="type_vehicle_id" />
+                    <field name="fuel_type" />
+                </tree>
+            </field>
+        </record>
+
         <record id="mi_marca" model="fleet.vehicle.model.brand">
             <field name="name">QX Motors</field>
         </record>

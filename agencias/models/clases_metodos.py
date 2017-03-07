@@ -53,6 +53,7 @@ class versiones_autos(models.Model):
                                     ('estandar','Estandar'),
                                     ],'Tipo de Transmision')
     doors_n = fields.Integer('No. Puertas')
+    image = fields.Binary('Imagen')
 
 class agencias_tipo_auto(models.Model):
     _name = 'agencias.tipo.auto'
