@@ -12,7 +12,7 @@
                 </tree>
             </field>
         </record>
-        
+
         <!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo -->
         <record id="autos_proceso_compras_form" model="ir.ui.view">
             <field name="name">autos.proceso.compras.form</field>
@@ -23,6 +23,9 @@
                         <group col="4">
 							<notebook>
 								<page string="Datos de la Compra">
+									<group>
+										<field name="purchase_id" readonly="True"/>
+									</group>
 									<group col="4">
 										<field name="fecha" />
 										<field name="proveedor" />
@@ -110,7 +113,18 @@
                 </form>
             </field>
         </record>
-		
+
+<record id="purchase_order_autos_inherit" model="ir.ui.view">
+            <field name="name">purchase.order.variantes</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <field name="date_order" position="after">
+                	<field name="compra_nuevos_id" />
+                </field>
+            </field>
+        </record>
+
 	<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
 		<record id="autos_procesos_compras_action" model="ir.actions.act_window">
 			<field name="name">Compras</field>			
@@ -127,6 +141,10 @@
                    <sheet>
 						<group  col="4">
 							<field name="brand_default_id" />
+						</group>
+						<group  col="4">
+							<field name="product_template_new_car"  domain="[('is_car','=',True),('type_car','=','new')]" context="{'default_is_car':True,'default_type_car':'new','default_type':'product'}"/>
+							<field name="product_template_used_car" domain="[('is_car','=',True),('type_car','=','used')]" context="{'default_is_car':True,'default_type_car':'used','default_type':'product'}"/>
 						</group>
                    </sheet>
 

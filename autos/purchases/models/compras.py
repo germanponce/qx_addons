@@ -141,6 +141,8 @@ class autos_proceso_compras(models.Model):
                                   'catalogo_ac_id', 'accesorio_a_id', string='Accesorios', required=False,
                                   help='Accesorios')
 
+    purchase_id = fields.Many2one('purchase.order', 'Pedido de Compra')
+
     @api.onchange('id_version')
     def onchange_version(self, id_version):
         res = {}
@@ -246,11 +248,17 @@ class autos_proceso_compras(models.Model):
         else:
             return super(autos_proceso_compras, self).create(values)
 
+class purchase_order(models.Model):
+    _inherit = 'purchase.order'
+
+    compra_nuevos_id = fields.Many2one('autos.proceso.compras','Compra Autos Nuevos', readonly=True)
     
+
 class agencias_configuracion(models.Model):
     _name = 'agencias.configuracion'
     _description = 'configuracion para el Modulo de Agencias'
     _rec_name = 'brand_default_id'
 
     brand_default_id = fields.Many2one('fleet.vehicle.model.brand','Marca', required=True, help='Define el nombre de la Version.')
-    
+    product_template_new_car = fields.Many2one('product.template','Producto Autos Nuevos', help='Estos campos ayudan a generar compras para Cada uno de los Casos.', )
+    product_template_used_car = fields.Many2one('product.template','Producto Autos Usados', help='Estos campos ayudan a generar compras para Cada uno de los Casos.', )
