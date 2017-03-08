@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+
+        <record id="product_template_inherit_autos" model="ir.ui.view">
+            <field name="name">product.template.inherit.autos</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <field name="categ_id" position="replace">
+                    <field name="is_car" attrs="{'invisible':[('type','!=','product')]}"/>
+                    <field name="categ_id" string="Categoria Interna"/>
+                </field>
+                <notebook position="inside">
+                    <page string="Propiedades Automovil" attrs="{'invisible':[('is_car','=',False)]}" >
+                        <group col="4">
+                            <field name="type_car" attrs="{'required':[('is_car','=',True)]}" />
+                        </group>
+                        <separator string="Accesorios" />
+                        <field name="accesorios_ids" widget="many2many_tags"/>
+                        <separator string="Atributos de las Variantes" />
+                        <field name="attribute_line_ids" widget="one2many_list" context="{'show_attribute': False}" >
+                            <tree string="Variants" editable="bottom">
+                                <field name="attribute_id"/>
+                                <field name="value_ids" widget="many2many_tags" options="{'no_create_edit': True}" domain="[('attribute_id', '=', attribute_id)]" context="{'default_attribute_id': attribute_id}"/>
+                            </tree>
+                            </field>
+                                <p class="oe_grey">
+                                <strong>Advertencia</strong>:Agregar o eliminar atributos puede generar la perdida o recrear nuevos productos como resultado.
+                            </p>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+        <record id="product_template_only_form_view_autos_inherit" model="ir.ui.view">
+            <field name="name">product.template.inherit.autos.variantes</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <page name="variants" position="attributes">
+                   <attribute name="attrs">{'invisible':[('is_car','=',True)]}</attribute>
+                </page>
+                <!-- <field name="attribute_line_ids" position="attributes">
+                    <attribute name="attrs">{'invisible':[('is_car','=',True)]}</attribute>
+                </field> -->
+            </field>
+        </record>
+
+
+        <record id="autos_catalogo_accesorios_form_inherit" model="ir.ui.view">
+            <field name="name">autos.catalogo.accesorios.variantes</field>
+            <field name="model">autos.catalogo.accesorios</field>
+            <field name="inherit_id" ref="autos_catalogo_accesorios_form"/>
+            <field name="arch" type="xml">
+                <sheet position="inside">
+                    <separator string="Productos" />
+                    <field name="product_ids" domain="[('is_car','=',True)]"/>
+                </sheet>
+            </field>
+        </record>
+
+    </data>
+</openerp>

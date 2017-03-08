@@ -5,7 +5,6 @@ from odoo import fields, models, api,exceptions
 import odoo.addons.decimal_precision as dp
 
 
-# class autos_compras_datos_vin(models.Model):
 class autos_compras_datos_vin(models.Model):
     _name = 'autos.compras.datos.vin'
     vin = fields.Char('Vin', size=17, required=True)
@@ -77,14 +76,14 @@ class autos_compras_datos_compra(models.Model):
     estatus_vin = fields.Many2one('autos.catalogo.estatus.vin', 'Estatus Vin', required=True)
 
 
-# class autos_compras_equipo(models.Model):
-#     _name = 'autos.compras.datos.equipo'
-#     color_exterior = fields.Many2one('autos.catalogo.color.exterior', 'Color Exterior', required=True)
-#     precio_publico_ext = fields.Float('Precio Publico', digits=(5, 5), required=True, readonly=False, help='Precio Publico')
-#     distribuidor_ext = fields.Float('Distribuidor', digits=(5, 5), required=True, readonly=False, help='Distribuidor')
-#     color_interior = fields.Many2one('autos.catalogo.color.interior', 'Color Interior', required=True)
-#     precio_publico_int = fields.Float('Precio Publico', digits=(5, 5), required=True, readonly=False, help='Precio Publico')
-#     distribuidor_int = fields.Float('Distribuidor', digits=(5, 5), required=True, readonly=False, help='Distribuidor')
+class autos_compras_equipo(models.Model):
+    _name = 'autos.compras.datos.equipo'
+    color_exterior = fields.Many2one('autos.catalogo.color.exterior', 'Color Exterior', required=True)
+    precio_publico_ext = fields.Float('Precio Publico', digits=(5, 5), required=True, readonly=False, help='Precio Publico')
+    distribuidor_ext = fields.Float('Distribuidor', digits=(5, 5), required=True, readonly=False, help='Distribuidor')
+    color_interior = fields.Many2one('autos.catalogo.color.interior', 'Color Interior', required=True)
+    precio_publico_int = fields.Float('Precio Publico', digits=(5, 5), required=True, readonly=False, help='Precio Publico')
+    distribuidor_int = fields.Float('Distribuidor', digits=(5, 5), required=True, readonly=False, help='Distribuidor')
 
 
 class autos_compras_datos_informacion(models.Model):
@@ -117,10 +116,8 @@ class autos_proceso_compras(models.Model):
         'autos.compras.documentos.extranjero': 'extranjero_id',
         'autos.compras.precios': 'precios_id',
         'autos.compras.datos.compra': 'datoscompra_id',
-        # 'autos.compras.datos.equipo': 'equipo_id',
+        'autos.compras.datos.equipo': 'equipo_id',
         'autos.compras.datos.informacion': 'informacion_id',
-        'purchase.order': 'purchase_id', # Argil
-
     }
 
     def _default_estatus_compra(self):
@@ -129,12 +126,12 @@ class autos_proceso_compras(models.Model):
 
     cod_compra = fields.Char('Cod Compra', help='Codigo Compra')
     nocompra = fields.Char('No Compra', help='No de compra que le asigna el sistema')
-    # fecha = fields.Date('Fecha Compra', required=True, default=fields.Date.today)
+    fecha = fields.Date('Fecha Compra', required=True, default=fields.Date.today)
     autos_vin = fields.Many2one('autos.vin', required=True, ondelete='cascade')
     tipo_compra = fields.Many2one('autos.catalogo.tipo.compra', 'Tipo Compra', required=True)
     estatus_compra = fields.Many2one('autos.catalogo.estatus.compra', 'Estatus de la Compra', required=True, default=_default_estatus_compra, index=True)
-    # proveedor = fields.Many2one('res.partner', 'Proveedor', required=True, help='Proveedor al que se le hace la compra')
-    facturaproveedor = fields.Many2one('account.invoice','Factura', required=True)
+    proveedor = fields.Many2one('res.partner', 'Proveedor', required=True, help='Proveedor al que se le hace la compra')
+    facturaproveedor = fields.Char('Factura', size=10, required=True)
     vencimiento_factura = fields.Date('Fecha Vencimiento Factura', required=True,
                                       help='Fecha en la que se vence la Factura', default=fields.Date.today)
     propio = fields.Boolean('Es Propio')
@@ -249,20 +246,11 @@ class autos_proceso_compras(models.Model):
         else:
             return super(autos_proceso_compras, self).create(values)
 
-class purchase_order_line(models.Model):
-    _inherit ='purchase.order.line'
     
-    color_exterior = fields.Many2one('autos.catalogo.color.exterior', 'Color Exterior')
-    precio_publico_ext = fields.Float('Precio Publico', digits=(5, 5), required=False, readonly=False, help='Precio Publico')
-    distribuidor_ext = fields.Float('Distribuidor', digits=(5, 5), required=False, readonly=False, help='Distribuidor')
-    color_interior = fields.Many2one('autos.catalogo.color.interior', 'Color Interior', required=False)
-    precio_publico_int = fields.Float('Precio Publico', digits=(5, 5), required=False, readonly=False, help='Precio Publico')
-    distribuidor_int = fields.Float('Distribuidor', digits=(5, 5), required=False, readonly=False, help='Distribuidor')
+class agencias_configuracion(models.Model):
+    _name = 'agencias.configuracion'
+    _description = 'configuracion para el Modulo de Agencias'
+    _rec_name = 'brand_default_id'
 
-
-
-class res_partner(models.Model):
-    _name = 'res.partner'
-    _inherit ='res.partner'
- 
-    concesionario = fields.Boolean('Es Concesionario')
+    brand_default_id = fields.Many2one('fleet.vehicle.model.brand','Marca', required=True, help='Define el nombre de la Version.')
+    

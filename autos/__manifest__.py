@@ -11,7 +11,7 @@
 			""",
 	"website": "http://www.google.com.mx/",
 	"license":"AGPL-3",
-	"depends":["sale","account","account_accountant","purchase"],
+	"depends":["sale","account","account_accountant","purchase","fleet"],
 	"init_xml":[],
 	"demo":[],
 	"data":[
@@ -51,6 +51,7 @@
 					"data_view/estatus_compra.xml",
 					
 					"views/menu.xml",
+					"views/product.xml",
 				 ],
 	"installable":True,
 	"active": False,
