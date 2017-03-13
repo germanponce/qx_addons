@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-	<data>
-	     <record id="autos_proceso_compras_tree" model="ir.ui.view">
+    <data>
+         <record id="autos_proceso_compras_tree" model="ir.ui.view">
             <field name="name">autos.proceso.compras.tree</field>
             <field name="model">autos.proceso.compras</field>
             <field name="arch" type="xml">
                 <tree string="Listado de Compras">
+                    <field name="id" />
                     <field name="nocompra" />
                     <field name="fecha" />
-					<field name="autos_vin" />
+                    <field name="autos_vin" />
+                    <field name="state" string="Estado del Docto"/>
                 </tree>
             </field>
         </record>
@@ -18,99 +20,112 @@
             <field name="name">autos.proceso.compras.form</field>
             <field name="model">autos.proceso.compras</field>
             <field name="arch" type="xml">
-                <form string = "Formulario de Compras" version="9.0">
+                <form string = "Formulario de Compras">
+                    <header>
+                        <button name="draft" states="cancel" string="Regresar a Borrador" type="object" />
+                        <button name="confirmed" states="draft" string="Confirmar Registro" type="object" />
+                        <button name="cancel" states="draft,confirmed" string="Cancelar Compra" type="object" />
+                        <button name="done" states="confirmed" string="Finalizar Compra" type="object" />
+
+                        <field name="state" readonly="1" widget="statusbar"/>
+                    </header>
                     <sheet>
                         <group col="4">
-							<notebook>
-								<page string="Datos de la Compra">
-									<group>
-										<field name="purchase_id" readonly="True"/>
-									</group>
-									<group col="4">
-										<field name="fecha" />
-										<field name="proveedor" />
-										<field name="estatus_vin"/>
-										<field name="concesionario"/>
-										<field name="numero_inventario" />
-										<field name="estatus_compra" />
-										<field name="traspaso" />
-										<field name="facturaproveedor" />
-										<field name="vencimiento_factura" />
-										<field name="departamentos" />
-										<field name="iva" />
-									</group>
-								</page>
-								<page string="Precio Distribuidor">
-									<group col="4">
-										<field name="ajuste" on_change="_calculacosto(ajuste,precio_base)"/>
-										<field name="precio_base" on_change="_calculacosto(ajuste,precio_base)"/>
-										<field name="costo_total" />
-										<field name="cargos_adicionales" />
-										<field name="subtotal_base" />
-										<field name="holdback" />
-										<field name="holdbackcosto" />
-										<field name="subtotal_compra" />
-										<field name="iva_costo" />
-										<field name="costo_iva" />
-										<field name="total" />
-									</group>
-								</page>
-								<page string="Datos VIN">
-									<group col="4">
-										<field name="vin" />
-										<field name="nummotor" />
-										<field name="marca" on_change="my_onchange_marca(marca,0)"/>
-										<field name="tipomotor" />
-										<field name="aniomodelo" />
-										<field name="tipotransmision" />
-										<field name="tipoauto" domain="[('marca','=',marca)]" on_change="my_onchange_marca(0,tipoauto)" />
-										<field name="nocilindros" />
-										<field name="id_version" domain="[('tipo_auto','=',tipoauto)]" on_change="onchange_version(id_version)" />
-										<field name="nopuertas" />
-										<field name="cvevehicular" />
-										<field name="pasajeros" />
-										<field name="cvecomercial" />
-										<field name="kilometraje" />
-										<field name="fechamatriculacion" />
-										<field name="diasPiso" />
-										<field name="placas" />
-									</group>
-									<group col="4">
-										<field name="contrato_Afasa" />
-										<field name="pedimiento" />
-										<field name="fechapedimiento" />
-										<field name="aduana" />
-										<field name="cuenta_contable_ext" />
-									</group>
-								</page>
-								<page string="Equipo de la Compra">
-									<group col="4">
-										<field name="color_exterior" />
-										<field name="color_interior" />
-										<field name="precio_publico_ext" />
-										<field name="precio_publico_int" />
-										<field name="distribuidor_ext" />
-										<field name="distribuidor_int" />
-										<field name="accesorios" colspan="4" />
-									</group>
-								</page>
-								<page string="Informacion Especifica">
-									<group col="4">
-                                        <field name="codigo_motor" />
-                                        <field name="codigo_fabricacion" />
-                                        <field name="numero_llave" />
-                                        <field name="kilometraje_anual" />
-                                        <field name="todo_terreno" />
-                                        <field name="recurso" />
-                                        <field name="documentacion" />
-                                        <field name="apartado" />
-                                        <field name="vehiculo_transito" />
-									</group>
-								</page>
-						</notebook>
+                            <notebook>
+                                <page string="Datos de la Compra">
+                                    <group>
+                                        <field name="purchase_id" readonly="True"/>
+                                    </group>
+                                    <group col="4">
+                                        <field name="fecha" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="proveedor" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="estatus_vin" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="concesionario" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="numero_inventario" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="estatus_compra" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="traspaso" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="facturaproveedor" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="vencimiento_factura" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="departamentos" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="iva" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                    </group>
+                                </page>
+                                <page string="Precio Distribuidor">
+                                    <group col="4">
+                                        <field name="ajuste" on_change="_calculacosto(ajuste,precio_base)" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="precio_base" on_change="_calculacosto(ajuste,precio_base)" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="costo_total" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="cargos_adicionales" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="subtotal_base" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="holdback" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="holdbackcosto" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="subtotal_compra" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="iva_costo" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="costo_iva" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="total" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                    </group>
+                                </page>
+                                <page string="Datos VIN">
+                                    <group col="4">
+                                        <field name="vin" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="nummotor"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="marca" on_change="my_onchange_marca(marca,0)" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="tipomotor"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="aniomodelo"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="tipotransmision"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="tipoauto" domain="[('marca','=',marca)]" on_change="my_onchange_marca(0,tipoauto)"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="nocilindros"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="id_version" domain="[('tipo_auto','=',tipoauto)]" on_change="onchange_version(id_version)"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="nopuertas"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="cvevehicular"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="pasajeros"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="cvecomercial"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="kilometraje"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="fechamatriculacion"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="diasPiso"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="placas"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                    </group>
+                                    <group col="4">
+                                        <field name="contrato_Afasa" attrs="{'readonly':[('state','!=','draft')]}" />
+                                        <field name="pedimiento" attrs="{'readonly':[('state','!=','draft')]}" />
+                                        <field name="fechapedimiento" attrs="{'readonly':[('state','!=','draft')]}" />
+                                        <field name="aduana" attrs="{'readonly':[('state','!=','draft')]}" />
+                                        <field name="cuenta_contable_ext" attrs="{'readonly':[('state','!=','draft')]}" />
+                                    </group>
+                                </page>
+                                <page string="Equipo de la Compra">
+                                    <group col="4">
+                                        <field name="color_exterior"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="color_interior"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="precio_publico_ext"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="precio_publico_int"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="distribuidor_ext"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="distribuidor_int"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                        <field name="accesorios" colspan="4"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                    </group>
+                                </page>
+                                <page string="Informacion Especifica">
+                                    <group col="4">
+                                        <field name="codigo_motor" attrs="{'readonly':[('state','!=','draft')]}" />
+                                        <field name="codigo_fabricacion" attrs="{'readonly':[('state','!=','draft')]}" />
+                                        <field name="numero_llave" attrs="{'readonly':[('state','!=','draft')]}" />
+                                        <field name="kilometraje_anual" attrs="{'readonly':[('state','!=','draft')]}" />
+                                        <field name="todo_terreno" attrs="{'readonly':[('state','!=','draft')]}" />
+                                        <field name="recurso" attrs="{'readonly':[('state','!=','draft')]}" />
+                                        <field name="documentacion" attrs="{'readonly':[('state','!=','draft')]}" />
+                                        <field name="apartado" attrs="{'readonly':[('state','!=','draft')]}" />
+                                        <field name="vehiculo_transito" attrs="{'readonly':[('state','!=','draft')]}" />
+                                    </group>
+                                </page>
+                        </notebook>
                         </group>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
+
             </field>
         </record>
 
@@ -120,18 +135,18 @@
             <field name="inherit_id" ref="purchase.purchase_order_form"/>
             <field name="arch" type="xml">
                 <field name="date_order" position="after">
-                	<field name="compra_nuevos_id" />
+                    <field name="compra_nuevos_id" />
                 </field>
             </field>
         </record>
 
-	<!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
-		<record id="autos_procesos_compras_action" model="ir.actions.act_window">
-			<field name="name">Compras</field>			
-			<field name="res_model">autos.proceso.compras</field>
-			<field name="view_type">form</field>
-			<field name="view_mode">tree,form</field>
-		</record>
+    <!-- Esto es para indicarle al sistema que con esto vamos a grabar en odoo este tipo de modelo-->
+        <record id="autos_procesos_compras_action" model="ir.actions.act_window">
+            <field name="name">Compras</field>          
+            <field name="res_model">autos.proceso.compras</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
 
         <record id="configuracion_formulario" model="ir.ui.view">
             <field name="name">agencias.configuracion.form</field>
@@ -139,13 +154,16 @@
             <field name="arch" type="xml">
                 <form string="">
                    <sheet>
-						<group  col="4">
-							<field name="brand_default_id" />
-						</group>
-						<group  col="4">
-							<field name="product_template_new_car"  domain="[('is_car','=',True),('type_car','=','new')]" context="{'default_is_car':True,'default_type_car':'new','default_type':'product'}"/>
-							<field name="product_template_used_car" domain="[('is_car','=',True),('type_car','=','used')]" context="{'default_is_car':True,'default_type_car':'used','default_type':'product'}"/>
-						</group>
+                        <group  col="4">
+                            <field name="brand_default_id" />
+                        </group>
+                        <group  col="4">
+                            <field name="product_template_new_car"  domain="[('is_car','=',True),('type_car','=','new')]" context="{'default_is_car':True,'default_type_car':'new','default_type':'product'}"/>
+                            <field name="product_template_used_car" domain="[('is_car','=',True),('type_car','=','used')]" context="{'default_is_car':True,'default_type_car':'used','default_type':'product'}"/>
+                        </group>
+                        <group >
+                            <field name="stock_picking_type" domain="[('code','=','incoming')]" options="{'no_create_edit':True,'no_create':True}"/>
+                        </group>
                    </sheet>
 
                 </form>
@@ -160,9 +178,9 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-		<menuitem id="config_autos" parent="autos_menu" name="Configuracion" sequence="100"/>
+        <menuitem id="config_autos" parent="autos_menu" name="Configuracion" sequence="100"/>
 
-		<menuitem id="config_autos_act" parent="config_autos" name="Configuracion" sequence="0" action="agencias_confi_act"/>
+        <menuitem id="config_autos_act" parent="config_autos" name="Configuracion" sequence="0" action="agencias_confi_act"/>
 
-	</data>
+    </data>
 </openerp>

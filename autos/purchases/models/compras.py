@@ -1,13 +1,14 @@
 # -*- encoding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from odoo import fields, models, api,exceptions
+from odoo import fields, models, api,exceptions, _
 import odoo.addons.decimal_precision as dp
 
 
 class autos_compras_datos_vin(models.Model):
+    _inherit = ['mail.thread', 'ir.needaction_mixin']
     _name = 'autos.compras.datos.vin'
-    vin = fields.Char('Vin', size=17, required=True)
+    vin = fields.Char('Vin', size=17, required=True, track_visibility='onchange')
     marca = fields.Many2one('autos.catalogo.marcas', 'Marca', required=True)
     aniomodelo = fields.Integer('Año Modelo', size=4, required=True)
     tipoauto = fields.Many2one('autos.catalogo.tipo.auto', 'Tipo Auto', required=True)
@@ -110,6 +111,7 @@ class autos_proceso_accesorio_compras(models.Model):
 class autos_proceso_compras(models.Model):
     _name = 'autos.proceso.compras'
     _description = 'Compra de Autos nuevos a la planta y concesionarios'
+    _inherit = ['mail.thread', 'ir.needaction_mixin']
     _inherits = {
         'autos.vin': 'autos_vin',
         'autos.compras.datos.vin': 'datosvin_id',
@@ -124,9 +126,9 @@ class autos_proceso_compras(models.Model):
         d_estatus_compra = self.env['autos.catalogo.estatus.compra'].search([('codestatus', '=', 'B')], limit=1).id
         return d_estatus_compra
 
-    cod_compra = fields.Char('Cod Compra', help='Codigo Compra')
+    cod_compra = fields.Char('Cod Compra', help='Codigo Compra', copy=False, track_visibility='onchange')
     nocompra = fields.Char('No Compra', help='No de compra que le asigna el sistema')
-    fecha = fields.Date('Fecha Compra', required=True, default=fields.Date.today)
+    fecha = fields.Date('Fecha Compra', required=True, default=fields.Date.today, track_visibility='onchange')
     autos_vin = fields.Many2one('autos.vin', required=True, ondelete='cascade')
     tipo_compra = fields.Many2one('autos.catalogo.tipo.compra', 'Tipo Compra', required=True)
     estatus_compra = fields.Many2one('autos.catalogo.estatus.compra', 'Estatus de la Compra', required=True, default=_default_estatus_compra, index=True)
@@ -142,6 +144,32 @@ class autos_proceso_compras(models.Model):
                                   help='Accesorios')
 
     purchase_id = fields.Many2one('purchase.order', 'Pedido de Compra')
+    state = fields.Selection([
+                              ('draft','Borrador'),
+                              ('confirmed','Confirmado'),
+                              ('done','Cerrado'),
+                              ('cancel','Cancelado'),
+                              ], 'Estado', default='draft')
+
+    _order = 'id desc' 
+
+    @api.multi
+    def draft(self, ):
+        self.state = 'draft'
+        user = self.env['res.users'].browse(self._uid)
+        self.message_post(
+                         body=_("Registro Confirmado.<br/>Confirmado por:<em>%s</em>.") % (user.name,))
+    @api.multi
+    def confirmed(self, ):
+        self.state = 'confirmed'
+
+    @api.multi
+    def done(self, ):
+        self.state = 'done'
+
+    @api.multi
+    def cancel(self, ):
+        self.state = 'cancel'
 
     @api.onchange('id_version')
     def onchange_version(self, id_version):
@@ -238,15 +266,22 @@ class autos_proceso_compras(models.Model):
         if result != 3:
             raise exceptions.except_orm(("Error!"),("El numero de VIN es Invalido: " + str(values['vin'])))
         else:
-            return super(autos_proceso_compras, self).create(values)
+            res = super(autos_proceso_compras, self).create(values)
+            user = self.env['res.users'].browse(self._uid)
+            res.message_post(
+                            body=_("Gracias por usar el sistema de Compra de Autos.<br/>Bienvenido:<em>%s</em>.") % (user.name,))
+            return res
 
     @api.multi
     def write(self, values):
-        result = self.VinValidate(self,values['vin'])
-        if result != 3:
-            raise exceptions.except_orm(("Error!"),("El numero de VIN es Invalido: " + str(values['vin'])))
+        if 'vin' in values:
+            result = self.VinValidate(self,values['vin'])
+            if result != 3:
+                raise exceptions.except_orm(("Error!"),("El numero de VIN es Invalido: " + str(values['vin'])))
+            else:
+                return super(autos_proceso_compras, self).write(values)
         else:
-            return super(autos_proceso_compras, self).create(values)
+            return super(autos_proceso_compras, self).write(values)
 
 class purchase_order(models.Model):
     _inherit = 'purchase.order'
@@ -262,3 +297,5 @@ class agencias_configuracion(models.Model):
     brand_default_id = fields.Many2one('fleet.vehicle.model.brand','Marca', required=True, help='Define el nombre de la Version.')
     product_template_new_car = fields.Many2one('product.template','Producto Autos Nuevos', help='Estos campos ayudan a generar compras para Cada uno de los Casos.', )
     product_template_used_car = fields.Many2one('product.template','Producto Autos Usados', help='Estos campos ayudan a generar compras para Cada uno de los Casos.', )
+    stock_picking_type = fields.Many2one('stock.picking.type','Regla de Recepcion', help='Indicara las reglas y ubicaciones por \
+                                                                                            donde ingresara la mercancia hasta llegar al Almacen Principal.', )
