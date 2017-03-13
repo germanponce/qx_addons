@@ -178,9 +178,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="config_autos" parent="autos_menu" name="Configuracion" sequence="100"/>
 
-        <menuitem id="config_autos_act" parent="config_autos" name="Configuracion" sequence="0" action="agencias_confi_act"/>
 
     </data>
 </openerp>
