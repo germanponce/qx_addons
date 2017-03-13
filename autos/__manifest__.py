@@ -16,7 +16,7 @@
     "demo":[],
     "data":[
                     
-
+                    "views/menu.xml",
                     # Load Views
                     "catalogs/views/accesorios.xml",
                     "catalogs/views/tipo_vehiculo.xml",
@@ -50,7 +50,6 @@
                     "data_view/tipo_auto.xml",
                     "data_view/estatus_compra.xml",
                     
-                    "views/menu.xml",
                     "views/product.xml",
                  ],
     "installable":True,
