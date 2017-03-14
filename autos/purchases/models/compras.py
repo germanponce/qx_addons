@@ -196,17 +196,27 @@ class autos_proceso_compras(models.Model):
     def cancel(self, ):
         self.state = 'cancel'
 
+    # @api.onchange('id_version')
+    # def onchange_version(self, id_version):
+    #     res = {}
+    #     if id_version:
+    #         self._cr.execute(
+    #             "SELECT accesorios_v_id FROM autos_rel_accesorio_versiones WHERE versiones_a_id = " + str(id_version))
+    #         return {
+    #             'domain': {
+    #                 'accesorios': [('id', 'in', self._cr.fetchall())]
+    #             }
+    #         }
+
+
     @api.onchange('id_version')
-    def onchange_version(self, id_version):
-        res = {}
-        if id_version:
-            self._cr.execute(
-                "SELECT accesorios_v_id FROM autos_rel_accesorio_versiones WHERE versiones_a_id = " + str(id_version))
-            return {
-                'domain': {
-                    'accesorios': [('id', 'in', self._cr.fetchall())]
-                }
-            }
+    def my_onchange_version(self,):
+        list_accesorios_ids = []
+        if self.id_version:
+            for accesorio in self.id_version.accesorios:
+                list_accesorios_ids.append(accesorio.id)
+            self.update({'accesorios': [(6, 0, list_accesorios_ids)]})
+
 
     @api.onchange('marca', 'tipoauto')
     def my_onchange_marca(self, marca, tipoauto, context=None):

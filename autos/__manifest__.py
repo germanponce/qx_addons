@@ -52,6 +52,8 @@
                     
                     "views/menu.xml",
                     "views/product.xml",
+                    "security/groups.xml",
+                    "security/ir.model.access.csv",
                  ],
     "installable":True,
     "active": False,
