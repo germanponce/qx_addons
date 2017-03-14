@@ -5,11 +5,13 @@
             <field name="name">autos.proceso.compras.tree</field>
             <field name="model">autos.proceso.compras</field>
             <field name="arch" type="xml">
-                <tree string="Listado de Compras">
+                <tree string="Listado de Compras" decoration-muted="state=='draft'" decoration-danger="state=='cancel'" decoration-bf="state=='confirmed'" decoration-info="state=='done'" >
                     <field name="id" />
-                    <field name="nocompra" />
+                    <field name="sequence_name" />
+                    <!-- <field name="nocompra" /> -->
                     <field name="fecha" />
                     <field name="autos_vin" />
+                    <field name="purchase_id" invisible="1"/>
                     <field name="state" string="Estado del Docto"/>
                 </tree>
             </field>
@@ -30,6 +32,10 @@
                         <field name="state" readonly="1" widget="statusbar"/>
                     </header>
                     <sheet>
+                        <div class="oe_title">
+                            <label class="oe_edit_only" for="sequence_name" string="Secuencia de Compra"/>
+                            <h1><field name="sequence_name" readonly="1"/></h1>
+                        </div>
                         <group col="4">
                             <notebook>
                                 <page string="Datos de la Compra">
@@ -164,11 +170,42 @@
                         <group >
                             <field name="stock_picking_type" domain="[('code','=','incoming')]" options="{'no_create_edit':True,'no_create':True}"/>
                         </group>
+                        <group >
+                            <field name="sequence_purchase" />
+                            <field name="sequence_inventory" />
+                        </group>
                    </sheet>
 
                 </form>
             </field>
         </record>
+
+
+        <record id="sequence_purchase_id" model="ir.sequence">
+            <field name="name">Compra de Autos Nuevos</field>
+            <field name="implementation">standard</field>
+            <field name="prefix">COMP-%(y)s/%(month)s- </field>
+            <field name="padding">3</field>
+        </record>
+
+        <record id="sequence_inventory_id" model="ir.sequence">
+            <field name="name">Inventario de Autos Nuevos</field>
+            <field name="implementation">standard</field>
+            <field name="prefix">INV-%(y)s/%(month)s- </field>
+            <field name="padding">3</field>
+        </record>
+
+
+        <record id="mi_marca" model="fleet.vehicle.model.brand">
+            <field name="name">QX Motors</field>
+        </record>
+
+        <record id="configuracion_autos" model="agencias.configuracion">
+            <field name="brand_default_id" ref="mi_marca"/>
+            <field name="sequence_purchase" ref="sequence_purchase_id"/>
+            <field name="sequence_inventory" ref="sequence_inventory_id"/>
+        </record>
+
 
         <record id="agencias_confi_act" model="ir.actions.act_window">
             <field name="name">Configuracion</field>

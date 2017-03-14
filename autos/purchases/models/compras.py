@@ -3,6 +3,7 @@
 
 from odoo import fields, models, api,exceptions, _
 import odoo.addons.decimal_precision as dp
+from openerp.exceptions import UserError, RedirectWarning, ValidationError
 
 
 class autos_compras_datos_vin(models.Model):
@@ -61,10 +62,19 @@ class autos_compras_datos_compra(models.Model):
     def _default_iva(self):
         d_iva = self.env['account.tax'].search([('id', '=', 2)], limit=1).id
         return d_iva
-		
+
+    def _get_sequence_inventory(self):
+        sequence_inventory =""
+        config_obj = self.env['agencias.configuracion']
+        config_id = config_obj.search([])
+        if config_id:
+            config_id = config_id[0]
+            sequence_inventory = config_id.sequence_inventory.next_by_id()
+        return sequence_inventory
+
     fechamatriculacion = fields.Date('Fecha Matriculacion', required=True, help='Fecha de Matriculacion')
     almacen = fields.Many2one('autos.catalogo.almacenes', 'Almacen', required=True)
-    numero_inventario = fields.Char('Numero Inventario', size=20, required=True)
+    numero_inventario = fields.Char('Numero Inventario', size=64, required=True, default=_get_sequence_inventory)
     departamentos = fields.Many2one('autos.catalogo.departamento', 'Departamentos', required=True)
     proveedor = fields.Many2one('res.partner', 'Proveedor', required=True, help='Proveedor al que se le hace la compra')
     tipocompra = fields.Many2one('autos.catalogo.tipo.compra', 'Tipo Compra', required=True)
@@ -112,6 +122,7 @@ class autos_proceso_compras(models.Model):
     _name = 'autos.proceso.compras'
     _description = 'Compra de Autos nuevos a la planta y concesionarios'
     _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _rec_name = 'sequence_name' 
     _inherits = {
         'autos.vin': 'autos_vin',
         'autos.compras.datos.vin': 'datosvin_id',
@@ -125,6 +136,15 @@ class autos_proceso_compras(models.Model):
     def _default_estatus_compra(self):
         d_estatus_compra = self.env['autos.catalogo.estatus.compra'].search([('codestatus', '=', 'B')], limit=1).id
         return d_estatus_compra
+
+    def _get_sequence_purchase(self):
+        sequence_purchase =""
+        config_obj = self.env['agencias.configuracion']
+        config_id = config_obj.search([])
+        if config_id:
+            config_id = config_id[0]
+            sequence_purchase = config_id.sequence_purchase.next_by_id()
+        return sequence_purchase
 
     cod_compra = fields.Char('Cod Compra', help='Codigo Compra', copy=False, track_visibility='onchange')
     nocompra = fields.Char('No Compra', help='No de compra que le asigna el sistema')
@@ -151,7 +171,12 @@ class autos_proceso_compras(models.Model):
                               ('cancel','Cancelado'),
                               ], 'Estado', default='draft')
 
+    sequence_name = fields.Char('Secuencia', size=128, default=_get_sequence_purchase)
+
     _order = 'id desc' 
+
+    ## Consulta por Codigo de la secuencia
+    # sequence_name = self.env['ir.sequence'].next_by_code('sale.order')
 
     @api.multi
     def draft(self, ):
@@ -299,3 +324,16 @@ class agencias_configuracion(models.Model):
     product_template_used_car = fields.Many2one('product.template','Producto Autos Usados', help='Estos campos ayudan a generar compras para Cada uno de los Casos.', )
     stock_picking_type = fields.Many2one('stock.picking.type','Regla de Recepcion', help='Indicara las reglas y ubicaciones por \
                                                                                             donde ingresara la mercancia hasta llegar al Almacen Principal.', )
+    sequence_purchase = fields.Many2one('ir.sequence', 'Secuencia Compras')
+    sequence_inventory = fields.Many2one('ir.sequence', 'Secuencia Inventarios')
+
+    
+    @api.one
+    @api.constrains('id','brand_default_id')
+    def _check_config(self):
+        print "##### check config rule >>>>"
+        if self.id and self.brand_default_id:
+            other_id = self.search([('id','!=',self.id)])
+            print "######## OTHER IDS >>>> ",other_id
+            if other_id:
+                raise ValidationError(_('Solo debe existir un registro de Configuracion.'))
