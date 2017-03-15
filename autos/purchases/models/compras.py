@@ -361,14 +361,83 @@ class asistente_compra_autos(models.TransientModel):
         print "####### context ",context
         return compra_br.fecha if compra_br.fecha else False
 
-    fechacompra = fields.Date('Fecha para Compra', default=_get_fecha)
+    def _get_picking_type(self):
+        config_obj = self.env['agencias.configuracion']
+        config_id = config_obj.search([])
+        if config_id:
+            stock_picking_type = config_id[0].stock_picking_type.id if config_id[0].stock_picking_type else False
+            return stock_picking_type
 
+    fechacompra = fields.Date('Fecha para Compra', default=_get_fecha)
+    fecha_prevista = fields.Date('Fecha Recepcion', default=fields.Date.today())
+    stock_picking_type = fields.Many2one('stock.picking.type','Regla de Recepcion', help='Indicara las reglas y ubicaciones por \
+                                                                                           donde ingresara la mercancia hasta llegar al Almacen Principal.', default=_get_picking_type )
+    product_tmpl = fields.Many2one('product.template','Plantilla Compra Auto')
+    
+    product_id = fields.Many2one('product.product','Variante')
+
+    serial_number = fields.Many2one('stock.production.lot','No. Serie')
 
     @api.multi
     def create_purchase(self):
         print "############ create_purchase "
         ### CONTEXT
         context = self._context
+        active_ids = context['active_ids']
         print "############ context >>>>>>>> ",context
+        compra_obj = self.env['autos.proceso.compras']
+        no_confirmed_ids = compra_obj.search([('state','!=','confirmed'),
+                                              ('id','in',active_ids)])
+        if no_confirmed_ids:
+            raise ValidationError(_('Uno o varios de los registros seleccionados\
+                se encuentran en un estado Invalido.\n(Solo se puede generar compras\
+                en registros confirmados)'))
 
         return True
+
+    @api.multi
+    def create_serial_number(self):
+        print "########## CREANDO EL NO. SERIE >>>>"
+        context = self._context
+        active_id = context['active_id']
+        compra_obj = self.env['autos.proceso.compras']
+        compra_br = compra_obj.browse(active_id)
+        serial_obj = self.env['stock.production.lot']
+        serial_name = ""
+        serial_name =  compra_br.vin+"/"+compra_br.nummotor
+        print "######## self.product_tmpl.id ",self.product_tmpl.id
+        print "######## serial_name ",serial_name
+
+        product_id = self.product_id.id
+        
+        exist_lot_number = serial_obj.search([('product_id','=',self.product_id.id),
+                                              ('name','=',serial_name)])
+        serial_id = False
+        if exist_lot_number:
+            serial_id = exist_lot_number[0].id
+        else:
+            vals = {
+                'product_id': self.product_id.id,
+                'name': serial_name,
+            }
+            serial_result = serial_obj.create(vals)
+            serial_id = serial_result.id
+
+        self.write({
+            'fechacompra': self.fechacompra,
+            'fecha_prevista': self.fecha_prevista,
+            'stock_picking_type': self.stock_picking_type.id ,
+            'product_tmpl': self.product_tmpl.id,
+            'product_id': self.product_id.id,
+            'serial_number': serial_id,
+
+            })
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'asistente.compra.autos',
+            'view_mode': 'form',
+            'view_type': 'form',
+            'res_id': self.id,
+            'views': [(False, 'form')],
+            'target': 'new',
+            }
