@@ -378,6 +378,8 @@ class asistente_compra_autos(models.TransientModel):
 
     serial_number = fields.Many2one('stock.production.lot','No. Serie')
 
+    comfirm_order = fields.Boolean('Confirmar Compra', help='Si se activa este campo el pedido de compra sera confirmado y se creara una entrada a Almacen.', )
+    
     @api.multi
     def create_purchase(self):
         print "############ create_purchase "
@@ -432,6 +434,9 @@ class asistente_compra_autos(models.TransientModel):
         print "########### PEDIDO ID >>>> ",purchase_id
         compra_br.write({'purchase_id': purchase_id.id})
         compra_br.done()
+
+        if self.comfirm_order:
+            purchase_id.button_confirm()
 
         return {
                 'domain': "[('id','in', ["+','.join(map(str,[purchase_id.id]))+"])]",
