@@ -347,3 +347,28 @@ class agencias_configuracion(models.Model):
             print "######## OTHER IDS >>>> ",other_id
             if other_id:
                 raise ValidationError(_('Solo debe existir un registro de Configuracion.'))
+
+
+class asistente_compra_autos(models.TransientModel):
+    _name = 'asistente.compra.autos'
+    _description = 'Asistente para generar ordenes de Compra'
+
+
+    def _get_fecha(self):
+        context = self._context
+        active_id = context['active_id']
+        compra_br = self.env['autos.proceso.compras'].browse(active_id)
+        print "####### context ",context
+        return compra_br.fecha if compra_br.fecha else False
+
+    fechacompra = fields.Date('Fecha para Compra', default=_get_fecha)
+
+
+    @api.multi
+    def create_purchase(self):
+        print "############ create_purchase "
+        ### CONTEXT
+        context = self._context
+        print "############ context >>>>>>>> ",context
+
+        return True

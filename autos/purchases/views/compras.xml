@@ -299,5 +299,45 @@
 
 
 
+    <!-- ASISTENTE -->
+    <record id="asistente_compras_autos" model="ir.ui.view">
+    <field name="name">asistente.compra.autos.form</field>
+    <field name="model">asistente.compra.autos</field>
+    <field name="type">form</field>
+    <field name="arch" type="xml">
+        <form string="Asistente para Generar Compras" >
+            <header>
+            </header>
+
+            <sheet >
+                <separator string="Valores de la Compra" />
+                <group>
+                    <field name="fechacompra" col="4"/>
+                </group>
+            </sheet>
+            <footer>
+               <center>
+                    <button name="create_purchase" string="Consultar" type="object" icon="gtk-execute"/>
+
+                    <button string="Cerrar" special="cancel"  icon="gtk-cancel" class="oe_highlight"/>
+                </center>
+            </footer>
+            
+        </form>
+        </field>
+    </record>
+
+
+    <!--=================ACCION ASISTENTE==================-->
+
+    <act_window
+        name="Generar Compra"
+        res_model="asistente.compra.autos"
+        src_model="autos.proceso.compras"
+        view_mode="form" target="new"
+        key2="client_action_multi"
+        id="action_autos_proceso_compras"/>
+
+
     </data>
 </openerp>
