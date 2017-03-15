@@ -12,7 +12,7 @@ class autos_compras_datos_vin(models.Model):
     vin = fields.Char('Vin', size=17, required=True, track_visibility='onchange')
     marca = fields.Many2one('autos.catalogo.marcas', 'Marca', required=True)
     aniomodelo = fields.Integer('Año Modelo', size=4, required=True)
-    tipoauto = fields.Many2one('autos.catalogo.tipo.auto', 'Tipo Auto', required=True)
+    tipoauto = fields.Many2one('autos.catalogo.tipo.auto', 'Tipo Auto', required=False)
     version = fields.Many2one('autos.catalogo.version', 'Version', required=True)
     cvevehicular = fields.Char('Cve Vehicular', size=10, required=True)
     cvecomercial = fields.Char('Cve Comercial', size=10, required=True)
@@ -384,8 +384,11 @@ class asistente_compra_autos(models.TransientModel):
         ### CONTEXT
         context = self._context
         active_ids = context['active_ids']
+        active_id = context['active_id']
         print "############ context >>>>>>>> ",context
         compra_obj = self.env['autos.proceso.compras']
+        compra_br = compra_obj.browse(active_id)
+
         no_confirmed_ids = compra_obj.search([('state','!=','confirmed'),
                                               ('id','in',active_ids)])
         if no_confirmed_ids:
@@ -393,7 +396,52 @@ class asistente_compra_autos(models.TransientModel):
                 se encuentran en un estado Invalido.\n(Solo se puede generar compras\
                 en registros confirmados)'))
 
-        return True
+        if len(active_ids) != 1:
+            raise ValidationError(_('Solo puedes ejecutar el asistente sobre 1 registro en especifico.'))
+        purchase_obj = self.env['purchase.order']
+
+
+        vals = {
+            'partner_id': compra_br.proveedor.id,
+            'compra_nuevos_id': compra_br.id,
+            'date_order': self.fechacompra,
+            'date_planned': self.fecha_prevista,
+            'picking_type_id': self.stock_picking_type.id,
+        }
+        purchase_id = purchase_obj.create(vals)
+
+        purchase_line_obj = self.env['purchase.order.line']
+
+        description = ""
+        codigo_producto = "["+self.product_id.default_code+ "] " if self.product_id.default_code else ""
+        accesorios = [str(x.descripcion) for x in compra_br.accesorios]
+        description = codigo_producto+ self.product_id.name+"\n"+"Accesorios: "+str(accesorios)
+        
+        linea_compra = {
+            'product_id': self.product_id.id,
+            'product_qty': 1.0,
+            'price_unit': compra_br.total,
+            'name': description,
+            'product_uom': self.product_id.uom_po_id.id,
+            'date_planned': self.fecha_prevista,
+            'taxes_id': [(6, 0, [compra_br.iva_costo.id])],
+            'order_id': purchase_id.id,
+        }
+
+        purchase_line_obj.create(linea_compra)
+        print "########### PEDIDO ID >>>> ",purchase_id
+        compra_br.write({'purchase_id': purchase_id.id})
+        compra_br.done()
+
+        return {
+                'domain': "[('id','in', ["+','.join(map(str,[purchase_id.id]))+"])]",
+                'name': _('Compra de Autos Nuevos'),
+                'view_type': 'form',
+                'view_mode': 'tree,form',
+                'res_model': 'purchase.order',
+                'view_id': False,
+                'type': 'ir.actions.act_window'
+                }
 
     @api.multi
     def create_serial_number(self):

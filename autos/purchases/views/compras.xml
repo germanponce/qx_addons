@@ -2,6 +2,58 @@
 <openerp>
     <data>
 
+    <!-- ASISTENTE -->
+    <record id="asistente_compras_autos" model="ir.ui.view">
+    <field name="name">asistente.compra.autos.form</field>
+    <field name="model">asistente.compra.autos</field>
+    <field name="type">form</field>
+    <field name="arch" type="xml">
+        <form string="Asistente para Generar Compras" >
+            <header>
+                <button name="create_serial_number" string="Crear No. Serie" type="object" class="fa fa-bolt" attrs="{'invisible':[('serial_number','!=',False)]}"/>
+            </header>
+
+            <sheet >
+                <separator string="Valores de la Compra" col="4" />
+                <group col="4">
+                    <field name="fechacompra" required="1"/>
+
+                    <field name="fecha_prevista" required="1"/>
+
+                    <field name="product_tmpl" required="1" domain="[('is_car','=',True),('type_car','=','new')]" options="{'no_create':True,'no_create_edit':True}"/>
+
+                    <field name="product_id" domain="[('product_tmpl_id','=',product_tmpl)]" attrs="{'invisible':[('product_tmpl','=',False)],'required':[('product_tmpl','!=',False)]}" options="{'no_create':True,'no_create_edit':True}"/>
+
+                    <field name="serial_number" domain="[('product_id','=',product_id)]" context="{'default_product_id':product_id}"/>
+
+                </group>
+                <group>
+                    <field name="stock_picking_type" required="1" domain="[('code','=','incoming')]" />
+                </group>
+            </sheet>
+            <footer>
+               <center>
+                    <button name="create_purchase" string="Crear orden de Compra" type="object" class="fa fa-bolt"/>
+
+                    <button string="Cerrar" special="cancel" class="fa fa-times"/>
+                </center>
+            </footer>
+            
+        </form>
+        </field>
+    </record>
+
+
+    <!--=================ACCION ASISTENTE==================-->
+
+    <act_window
+        name="Generar Compra"
+        res_model="asistente.compra.autos"
+        src_model="autos.proceso.compras"
+        view_mode="form" target="new"
+        key2="client_action_multi"
+        id="action_autos_proceso_compras"/>
+
          <record id="autos_proceso_compras_tree" model="ir.ui.view">
             <field name="name">autos.proceso.compras.tree</field>
             <field name="model">autos.proceso.compras</field>
@@ -60,6 +112,8 @@
                         <button name="confirmed" states="draft" string="Confirmar Registro" type="object" />
                         <button name="cancel" states="draft,confirmed" string="Cancelar Compra" type="object" />
                         <button name="done" states="confirmed" string="Finalizar Compra" type="object" />
+
+                        <button name='%(action_autos_proceso_compras)d' type='action' string='Generar Orden de Compra' states='confirmed' class="fa fa-slideshare oe_highlight"/>
 
                         <field name="state" readonly="1" widget="statusbar"/>
                     </header>
@@ -300,54 +354,6 @@
         </record>
 
     <menuitem id="config_autos_act" parent="config_autos" name="Configuracion" sequence="0" action="agencias_confi_act"/>
-
-    <!-- ASISTENTE -->
-    <record id="asistente_compras_autos" model="ir.ui.view">
-    <field name="name">asistente.compra.autos.form</field>
-    <field name="model">asistente.compra.autos</field>
-    <field name="type">form</field>
-    <field name="arch" type="xml">
-        <form string="Asistente para Generar Compras" >
-            <header>
-                <button name="create_serial_number" string="Crear No. Serie" type="object" class="fa fa-bolt"/>
-            </header>
-
-            <sheet >
-                <separator string="Valores de la Compra" col="4" />
-                <group col="4">
-                    <field name="fechacompra" required="1"/>
-                    <field name="fecha_prevista" required="1"/>
-                    <field name="product_tmpl" required="1" domain="[('is_car','=',True),('type_car','=','new')]" options="{'no_create':True,'no_create_edit':True}"/>
-                    <field name="product_id" domain="[('product_tmpl_id','=',product_tmpl)]" attrs="{'invisible':[('product_tmpl','=',False)],'required':[('product_tmpl','!=',False)]}" options="{'no_create':True,'no_create_edit':True}"/>
-                    <field name="serial_number" domain="[('product_id','=',product_id)]"/>
-
-                </group>
-                <group>
-                    <field name="stock_picking_type" required="1" domain="[('code','=','incoming')]" />
-                </group>
-            </sheet>
-            <footer>
-               <center>
-                    <button name="create_purchase" string="Consultar" type="object" class="fa fa-bolt"/>
-
-                    <button string="Cerrar" special="cancel" class="fa fa-times"/>
-                </center>
-            </footer>
-            
-        </form>
-        </field>
-    </record>
-
-
-    <!--=================ACCION ASISTENTE==================-->
-
-    <act_window
-        name="Generar Compra"
-        res_model="asistente.compra.autos"
-        src_model="autos.proceso.compras"
-        view_mode="form" target="new"
-        key2="client_action_multi"
-        id="action_autos_proceso_compras"/>
 
 
     </data>
