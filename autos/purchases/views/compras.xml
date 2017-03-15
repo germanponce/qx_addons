@@ -236,6 +236,8 @@
             <field name="search_view_id" ref="autos_proceso_compras_search" />
         </record>
 
+        <menuitem id="Compras_Autos_Nuevos" parent="autos_compras" name="Compras Autos Nuevos" sequence="1" action="autos_procesos_compras_action" />
+
         <record id="configuracion_formulario" model="ir.ui.view">
             <field name="name">agencias.configuracion.form</field>
             <field name="model">agencias.configuracion</field>
@@ -297,7 +299,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-
+    <menuitem id="config_autos_act" parent="config_autos" name="Configuracion" sequence="0" action="agencias_confi_act"/>
 
     <!-- ASISTENTE -->
     <record id="asistente_compras_autos" model="ir.ui.view">

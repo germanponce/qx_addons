@@ -18,6 +18,7 @@
                     
 
                     # Load Views
+                    "security/groups.xml",
                     "catalogs/views/accesorios.xml",
                     "catalogs/views/tipo_vehiculo.xml",
                     "catalogs/views/tipo_motor.xml",
@@ -36,8 +37,7 @@
                     "catalogs/views/marcas.xml",
                     "catalogs/views/tipo_auto.xml",
                     "catalogs/views/version.xml",
-                    "purchases/views/compras.xml",
-                    
+                   
                     # Load Data Default
                     "data_view/estatus_vin.xml",
                     # "data_view/tipo_rebate.xml",
@@ -47,12 +47,12 @@
                     "data_view/tipo_transmision.xml",
                     "data_view/ubicaciones.xml",
                     "data_view/tipo_venta.xml",
-                    "data_view/tipo_auto.xml",
+                    # "data_view/tipo_auto.xml",
                     "data_view/estatus_compra.xml",
                     
                     "views/menu.xml",
+                    "purchases/views/compras.xml",
                     "views/product.xml",
-                    "security/groups.xml",
                     "security/ir.model.access.csv",
                  ],
     "installable":True,

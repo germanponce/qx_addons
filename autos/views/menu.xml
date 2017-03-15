@@ -64,11 +64,10 @@
 
 				<menuitem id="autos_compras" parent="autos_menu" name="Compras" sequence="10" groups="autos_compra"/>
 					 <!--Sub menu de Compras-->
-					<menuitem id="Compras_Autos_Nuevos" parent="autos_compras" name="Compras Autos Nuevos" sequence="1" action="autos_procesos_compras_action" />
+					
 
-        <menuitem id="config_autos" parent="autos_menu" name="Configuracion" sequence="100"/>
+        		<menuitem id="config_autos" parent="autos_menu" name="Configuracion" sequence="100"/>
 
-        <menuitem id="config_autos_act" parent="config_autos" name="Configuracion" sequence="0" action="agencias_confi_act"/>
 
 	</data> 
 </openerp>
