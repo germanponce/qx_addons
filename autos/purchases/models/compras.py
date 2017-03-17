@@ -86,6 +86,17 @@ class autos_compras_datos_compra(models.Model):
     iva = fields.Many2one('account.tax', 'IVA', required=True, help='Iva', default=_default_iva )
     estatus_vin = fields.Many2one('autos.catalogo.estatus.vin', 'Estatus Vin', required=True)
 
+    @api.one
+    @api.returns('self', lambda value: value.id)
+    def copy(self, default=None):
+        default = dict(default or {})
+        config_obj = self.env['agencias.configuracion']
+        config_id = config_obj.search([])
+        if config_id:
+            config_id = config_id[0]
+            sequence_inventory = config_id.sequence_inventory.next_by_id()
+            default.update({'numero_inventario': sequence_inventory})
+        return super(autos_proceso_compras, self).copy(default)
 
 class autos_compras_equipo(models.Model):
     _name = 'autos.compras.datos.equipo'
@@ -185,7 +196,7 @@ class autos_proceso_compras(models.Model):
                                   'catalogo_ac_id', 'accesorio_a_id', string='Accesorios', required=False,
                                   help='Accesorios')
 
-    purchase_id = fields.Many2one('purchase.order', 'Pedido de Compra')
+    purchase_id = fields.Many2one('purchase.order', 'Pedido de Compra', copy=False)
     state = fields.Selection([
                               ('draft','Borrador'),
                               ('confirmed','Confirmado'),
@@ -195,7 +206,7 @@ class autos_proceso_compras(models.Model):
 
     sequence_name = fields.Char('Secuencia', size=128, default=_get_sequence_purchase)
 
-    picking_count = fields.Integer(compute='_compute_picking', string='Conteo de Albaranes', default=0)
+    picking_count = fields.Integer(compute='_compute_picking', string='Conteo de Albaranes', default=0, copy=False)
 
     picking_ids = fields.Many2many('stock.picking', compute='_compute_picking', string='Recepciones de Compra', copy=False)
 
@@ -406,6 +417,20 @@ class autos_proceso_compras(models.Model):
         else:
             return super(autos_proceso_compras, self).write(values)
 
+    @api.one
+    @api.returns('self', lambda value: value.id)
+    def copy(self, default=None):
+        default = dict(default or {})
+        config_obj = self.env['agencias.configuracion']
+        config_id = config_obj.search([])
+        if config_id:
+            config_id = config_id[0]
+            sequence_purchase = config_id.sequence_purchase.next_by_id()
+            sequence_inventory = config_id.sequence_inventory.next_by_id()
+            default.update({'sequence_name': sequence_purchase,
+                'numero_inventario': sequence_inventory})
+        return super(autos_proceso_compras, self).copy(default)
+
 class purchase_order(models.Model):
     _inherit = 'purchase.order'
 
@@ -464,10 +489,19 @@ class asistente_compra_autos(models.TransientModel):
     
     product_id = fields.Many2one('product.product','Variante')
 
+    comfirm_order = fields.Boolean('Confirmar Compra', help='Si se activa este campo el pedido de compra sera confirmado y se creara una entrada a Almacen.', )
+
     serial_number = fields.Many2one('stock.production.lot','No. Serie')
 
-    comfirm_order = fields.Boolean('Confirmar Compra', help='Si se activa este campo el pedido de compra sera confirmado y se creara una entrada a Almacen.', )
-    
+    serial_number_uniq = fields.Char('No. Serie Unico', size=128)
+
+    tracking = fields.Char('Seguimiento Serie/Lote')
+
+    @api.onchange('product_tmpl')
+    def my_onchange_product_tmpl(self,):
+        if self.product_tmpl:
+            self.update({'tracking': self.product_tmpl.tracking})
+
     @api.multi
     def create_purchase(self):
         print "############ create_purchase "
@@ -525,6 +559,35 @@ class asistente_compra_autos(models.TransientModel):
 
         if self.comfirm_order:
             purchase_id.button_confirm()
+            if self.tracking != 'none':
+                print "###### tracking >>> "
+                if self.tracking == 'serial':
+                    if self.serial_number_uniq:
+                        serial_number_uniq = self.serial_number_uniq
+                        for picking in compra_br.picking_ids:
+                            if picking.state != 'done':
+                                for pk in picking.pack_operation_product_ids:
+                                    if pk.product_id.id == self.product_id.id:
+                                        if pk.pack_lot_ids:
+                                            pk.pack_lot_ids.unlink()
+
+                                        lot_operation = [(0,0,{'lot_name':serial_number_uniq})]
+                                        pk.write({'pack_lot_ids': lot_operation})
+                else:
+                    if self.serial_number:
+                        serial_number = self.serial_number.id
+                        for picking in compra_br.picking_ids:
+                            if picking.state != 'done':
+                                for pk in picking.pack_operation_product_ids:
+                                    if pk.product_id.id == self.product_id.id:
+                                        if pk.pack_lot_ids:
+                                            pk.pack_lot_ids.unlink()
+
+                                        lot_operation = [(0,0,{
+                                            'lot_name':self.serial_number.name,
+                                            'qty': 1.0,
+                                            })]
+                                        pk.write({'pack_lot_ids': lot_operation})
 
         return {
                 'domain': "[('id','in', ["+','.join(map(str,[purchase_id.id]))+"])]",
@@ -551,34 +614,76 @@ class asistente_compra_autos(models.TransientModel):
 
         product_id = self.product_id.id
         
-        exist_lot_number = serial_obj.search([('product_id','=',self.product_id.id),
-                                              ('name','=',serial_name)])
-        serial_id = False
-        if exist_lot_number:
-            serial_id = exist_lot_number[0].id
-        else:
-            vals = {
-                'product_id': self.product_id.id,
-                'name': serial_name,
-            }
-            serial_result = serial_obj.create(vals)
-            serial_id = serial_result.id
+        if self.product_id.tracking == 'serial':
 
-        self.write({
+            self.write({
             'fechacompra': self.fechacompra,
             'fecha_prevista': self.fecha_prevista,
             'stock_picking_type': self.stock_picking_type.id ,
             'product_tmpl': self.product_tmpl.id,
             'product_id': self.product_id.id,
-            'serial_number': serial_id,
+            'serial_number_uniq': serial_name,
 
-            })
-        return {
-            'type': 'ir.actions.act_window',
-            'res_model': 'asistente.compra.autos',
-            'view_mode': 'form',
-            'view_type': 'form',
-            'res_id': self.id,
-            'views': [(False, 'form')],
-            'target': 'new',
-            }
+                })
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'asistente.compra.autos',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'res_id': self.id,
+                'views': [(False, 'form')],
+                'target': 'new',
+                'context': self._context,
+                }
+
+        elif self.product_id.tracking == 'lot':
+            exist_lot_number = serial_obj.search([('product_id','=',self.product_id.id),
+                                                  ('name','=',serial_name)])
+            serial_id = False
+            if exist_lot_number:
+                serial_id = exist_lot_number[0].id
+            else:
+                vals = {
+                    'product_id': self.product_id.id,
+                    'name': serial_name,
+                }
+                serial_result = serial_obj.create(vals)
+                serial_id = serial_result.id
+
+            self.write({
+                'fechacompra': self.fechacompra,
+                'fecha_prevista': self.fecha_prevista,
+                'stock_picking_type': self.stock_picking_type.id ,
+                'product_tmpl': self.product_tmpl.id,
+                'product_id': self.product_id.id,
+                'serial_number': serial_id,
+
+                })
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'asistente.compra.autos',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'res_id': self.id,
+                'views': [(False, 'form')],
+                'target': 'new',
+                'context': self._context,
+                }
+        else:
+            self.write({
+                'fechacompra': self.fechacompra,
+                'fecha_prevista': self.fecha_prevista,
+                'stock_picking_type': self.stock_picking_type.id ,
+                'product_tmpl': self.product_tmpl.id,
+                'product_id': self.product_id.id,
+                })
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'asistente.compra.autos',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'res_id': self.id,
+                'views': [(False, 'form')],
+                'target': 'new',
+                'context': self._context,
+                }
