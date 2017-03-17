@@ -122,6 +122,18 @@
                             <label class="oe_edit_only" for="sequence_name" string="Secuencia de Compra"/>
                             <h1><field name="sequence_name" readonly="1"/></h1>
                         </div>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_picking_purchase" class="oe_stat_button" icon="fa-truck" >
+                                <field name="picking_count" widget="statinfo" string="Recepciones" help="Albaranes ligados a esta Compra"/>
+                                <field name="picking_ids" invisible="1"/>
+                            </button>
+                            <button type="object" name="action_view_purchase" class="oe_stat_button" icon="fa-shopping-cart" >
+                                <field name="purchase_id_name" nolabel="1"/>
+                            </button>
+                            <button type="object" name="action_view_purchase_invoice" class="oe_stat_button" icon="fa-shopping-cart" string="Factura de Proveedor">
+                            </button>
+                            
+                        </div>
                         <group col="4">
                             <notebook>
                                 <page string="Datos de la Compra">

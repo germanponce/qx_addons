@@ -146,6 +146,28 @@ class autos_proceso_compras(models.Model):
             sequence_purchase = config_id.sequence_purchase.next_by_id()
         return sequence_purchase
 
+    @api.depends('purchase_id.order_line.move_ids.picking_id')
+    def _compute_picking(self):
+        for order in self:
+            pickings = self.env['stock.picking']
+            if order.purchase_id:
+                for line in order.purchase_id.order_line:
+                    moves = line.move_ids.filtered(lambda r: r.state != 'cancel')
+                    pickings |= moves.mapped('picking_id')
+                order.picking_ids = pickings
+                order.picking_count = len(pickings)
+            else:
+                order.picking_count = 0
+                order.picking_ids = False
+
+    @api.depends('purchase_id')
+    @api.one
+    def _compute_name_purchase(self):
+        if not self.purchase_id:
+            self.purchase_id_name = ""
+        else:
+            self.purchase_id_name = self.purchase_id.name
+
     cod_compra = fields.Char('Cod Compra', help='Codigo Compra', copy=False, track_visibility='onchange')
     nocompra = fields.Char('No Compra', help='No de compra que le asigna el sistema')
     fecha = fields.Date('Fecha Compra', required=True, default=fields.Date.today, track_visibility='onchange')
@@ -173,7 +195,73 @@ class autos_proceso_compras(models.Model):
 
     sequence_name = fields.Char('Secuencia', size=128, default=_get_sequence_purchase)
 
+    picking_count = fields.Integer(compute='_compute_picking', string='Conteo de Albaranes', default=0)
+
+    picking_ids = fields.Many2many('stock.picking', compute='_compute_picking', string='Recepciones de Compra', copy=False)
+
+    purchase_id_name = fields.Char(compute='_compute_name_purchase', string='Compra', size=128, default="", copy=False)
+
     _order = 'id desc' 
+
+    @api.multi
+    def action_view_picking_purchase(self):
+        '''
+        This function returns an action that display existing picking orders of given purchase order ids.
+        When only one found, show the picking immediately.
+        '''
+        action = self.env.ref('stock.action_picking_tree')
+        print "########### ACTION >>>> ",action
+        print "########### ACTION >>>> ",action.read()
+        print "########### ACTION >>>> ",action.read()[0]
+        result = action.read()[0]
+
+        #override the context to get rid of the default filtering on picking type
+        result['context'] = {}
+        if not self.purchase_id:
+            return True
+
+        pick_ids = sum([order.purchase_id.picking_ids.ids for order in self], [])
+        #choose the view_mode accordingly
+        if len(pick_ids) > 1:
+            result['domain'] = "[('id','in',[" + ','.join(map(str, pick_ids)) + "])]"
+        elif len(pick_ids) == 1:
+            res = self.env.ref('stock.view_picking_form', False)
+            result['views'] = [(res and res.id or False, 'form')]
+            result['res_id'] = pick_ids and pick_ids[0] or False
+        return result
+
+
+    @api.multi
+    def action_view_purchase(self):
+        '''
+        This function returns an action that display existing picking orders of given purchase order ids.
+        When only one found, show the picking immediately.
+        '''
+        result = {}
+        if self.purchase_id:
+            if self.purchase_id.state in ('purchase','done'):
+                action = self.env.ref('purchase.purchase_form_action')
+            else:
+                action = self.env.ref('purchase.purchase_rfq')
+
+            result = action.read()[0]
+
+            #override the context to get rid of the default filtering on picking type
+            result['context'] = {}
+
+            purchase_id = [self.purchase_id.id]
+            #choose the view_mode accordingly
+            res = self.env.ref('purchase.purchase_order_form', False)
+            result['views'] = [(res and res.id or False, 'form')]
+            result['res_id'] = purchase_id and purchase_id[0] or False
+        return result
+
+    @api.multi
+    def action_view_purchase_invoice(self):
+        if self.purchase_id:
+            result = self.purchase_id.action_view_invoice()
+            return result
+        return True
 
     ## Consulta por Codigo de la secuencia
     # sequence_name = self.env['ir.sequence'].next_by_code('sale.order')
