@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+<!--  Template de Reportes -->
+
+        <template id="report_compra_autos">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                           <h1>
+                            <font color="blue">
+                                Compra No.<span t-field="o.sequence_name" /> 
+                            </font>
+                           </h1>
+                           <!-- <span t-field="o.photo" t-field-options="{&quot;widget&quot;: &quot;image&quot;}"/> -->
+
+           
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <report 
+            id="report_student"
+            string="Proceso de Compra de Autos Nuevos"
+            model="autos.proceso.compras" 
+            report_type="qweb-pdf"
+            file="autos.report_compra_autos" 
+            name="autos.report_compra_autos"
+        />
+
+    </data>
+</openerp>

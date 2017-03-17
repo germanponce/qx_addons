@@ -54,6 +54,8 @@
                     "purchases/views/compras.xml",
                     "views/product.xml",
                     "security/ir.model.access.csv",
+                    "reports/report_purchase.xml",
+                    "reports/report_compra_autos.xml",
                  ],
     "installable":True,
     "active": False,
