@@ -687,3 +687,13 @@ class asistente_compra_autos(models.TransientModel):
                 'target': 'new',
                 'context': self._context,
                 }
+
+
+class product_product(models.Model):
+    _name = 'product.product'
+    _inherit ='product.product'
+
+    @api.multi
+    def read_price_product(self):
+        print "#### EJECUTANDO EL METOO DE LECTURA DE PRECIO "
+        return self.lst_price or 0.0
